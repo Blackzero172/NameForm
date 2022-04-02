@@ -1,10 +1,10 @@
 const Person = require("../models/person");
-const getAllPeople = async (req, res) => {
+const getPerson = async (req, res) => {
 	try {
-		const { IdNumber } = req.body;
-		const people = await Person.findOne({ IdNumber });
-		if (people.length < 1) return res.status(404).send("No Data Found");
-		res.send(people);
+		const { IdNumber } = req.params;
+		const person = await Person.findOne({ IdNumber: IdNumber });
+		if (!person) return res.status(404).send({});
+		res.send(person);
 	} catch (e) {
 		res.status(500).send(e.message);
 	}
@@ -12,7 +12,7 @@ const getAllPeople = async (req, res) => {
 const editPerson = async (req, res) => {
 	try {
 		const { IdNumber, name, phoneNumber, children } = req.body;
-		let person = await Person.findOne({ IdNumber });
+		let person = await Person.findOne({ IdNumber: IdNumber });
 		if (!person) {
 			person = new Person({ name, IdNumber, phoneNumber, children });
 			await person.save();
@@ -28,4 +28,4 @@ const editPerson = async (req, res) => {
 		res.status(500).send(e.message);
 	}
 };
-module.exports = { getAllPeople, editPerson };
+module.exports = { getPerson, editPerson };

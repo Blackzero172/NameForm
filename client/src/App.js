@@ -1,13 +1,17 @@
-import "./utils/utils.css";
-import "./App.css";
+import { useEffect, useRef, useState } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Spinner from "./components/Spinner/Spinner";
 import api from "./api/api";
-import { useEffect, useRef, useState } from "react";
-import LoginPage from "./Pages/LoginPage";
+import LoginPage from "./Pages/LoginPage/LoginPage";
 import CustomButton from "./components/CustomButton/CustomButton.components";
+import FormPage from "./Pages/FormPage/FormPage";
+
+import "./utils/utils.css";
+import "./App.css";
+
 function App() {
 	const [loggedInUser, setUser] = useState({});
-	const [credentials, setCredentials] = useState({ email: "", password: "" });
+	const [credentials, setCredentials] = useState({ email: "", password: "", phoneNumber: "", IdNumber: "" });
 	const spinnerRef = useRef();
 
 	const setLoading = (isShown) => {
@@ -23,13 +27,21 @@ function App() {
 			const user = res.data.user;
 			setUser(user);
 		} catch (e) {
-			console.error(e.response);
 			return e.response.data;
 		} finally {
 			setLoading(false);
 		}
 	};
-
+	const getData = async () => {
+		setLoading(true);
+		try {
+			const data = await api.get(`/people/${credentials.IdNumber}`);
+			setUser(data.data);
+		} catch (e) {
+		} finally {
+			setLoading(false);
+		}
+	};
 	useEffect(() => {
 		onLogin();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,16 +62,29 @@ function App() {
 		setUser(user.data);
 	};
 	return (
-		<>
-			{!loggedInUser.hasOwnProperty("name") ? (
-				<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
-			) : (
-				<p>
-					{`Welcome ${loggedInUser.name}`} <CustomButton onClick={onLogout} text="Logout" />
-				</p>
-			)}
+		<BrowserRouter>
+			<Switch>
+				<Route path="/" exact>
+					{!loggedInUser.hasOwnProperty("name") ? (
+						<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
+					) : (
+						<p>
+							{`Welcome ${loggedInUser.name}`} <CustomButton onClick={onLogout} text="Logout" />
+						</p>
+					)}
+				</Route>
+				<Route path="/form">
+					<FormPage
+						setCredentials={setCredentials}
+						credentials={credentials}
+						getPerson={getData}
+						person={loggedInUser}
+						setUser={setUser}
+					/>
+				</Route>
+			</Switch>
 			<Spinner spinnerRef={spinnerRef} />
-		</>
+		</BrowserRouter>
 	);
 }
 

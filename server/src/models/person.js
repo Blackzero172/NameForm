@@ -50,5 +50,13 @@ const personSchema = mongoose.Schema({
 	},
 	children: [childSchema],
 });
+personSchema.methods.toJSON = function () {
+	const person = this;
+	const personObject = person.toObject();
+
+	delete personObject._id;
+	delete personObject.__v;
+	return personObject;
+};
 const Person = mongoose.model("Person", personSchema);
 module.exports = Person;

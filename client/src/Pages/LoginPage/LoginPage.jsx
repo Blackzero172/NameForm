@@ -1,5 +1,5 @@
-import CustomInput from "../components/CustomInput/CustomInput.components";
-import CustomButton from "../components/CustomButton/CustomButton.components";
+import CustomInput from "../../components/CustomInput/CustomInput.components";
+import CustomButton from "../../components/CustomButton/CustomButton.components";
 import "./LoginPage.css";
 const LoginPage = ({ setCredentials, credentials, onLogin }) => {
 	const { email, password } = credentials;
@@ -10,9 +10,9 @@ const LoginPage = ({ setCredentials, credentials, onLogin }) => {
 	return (
 		<form className="login-page flex-both" onSubmit={handleFormSubmit}>
 			<div className="window flex-both flex-column">
-				<label>Login</label>
+				<label>تسجيل الدخول</label>
 				<CustomInput
-					label="Email"
+					label="الايميل"
 					value={email}
 					onChange={(e) => {
 						setCredentials({ ...credentials, email: e.target.value });
@@ -21,14 +21,14 @@ const LoginPage = ({ setCredentials, credentials, onLogin }) => {
 				/>
 				<CustomInput
 					type="password"
-					label="Password"
+					label="كلمة المرور"
 					value={password}
 					onChange={(e) => {
 						setCredentials({ ...credentials, password: e.target.value });
 					}}
 					name="Password"
 				/>
-				<CustomButton text="Login" type="submit" />
+				<CustomButton text="دخول" type="submit" />
 			</div>
 		</form>
 	);
