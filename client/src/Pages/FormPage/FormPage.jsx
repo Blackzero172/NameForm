@@ -37,8 +37,17 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		}
 	};
 	const handleIncorrectFields = () => {
-		if (isMobilePhone(phoneNumber, "he-IL") && isIdentityCard(IdNumber, "he-IL")) setError(false);
-		else setError(true);
+		if (!person.name && isMobilePhone(phoneNumber, "he-IL") && isIdentityCard(IdNumber, "he-IL"))
+			setError(false);
+		else if (
+			person.name &&
+			isMobilePhone(phoneNumber, "he-IL") &&
+			isIdentityCard(IdNumber, "he-IL") &&
+			isBefore(birthDate) &&
+			isAlpha(name)
+		) {
+			setError(false);
+		} else setError(true);
 	};
 	const checkField = (e) => {
 		if (
@@ -51,7 +60,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 			e.target.classList.remove("error");
 		} else {
 			e.target.classList.add("error");
-			setError(true);
+			handleIncorrectFields();
 		}
 	};
 	const changeChildInfo = (child, prop, value) => {

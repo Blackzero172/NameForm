@@ -1,9 +1,10 @@
+import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Spinner from "./components/Spinner/Spinner";
 import api from "./api/api";
 import LoginPage from "./Pages/LoginPage/LoginPage";
-import CustomButton from "./components/CustomButton/CustomButton.components";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 import FormPage from "./Pages/FormPage/FormPage";
 
 import "./utils/utils.css";
@@ -35,6 +36,10 @@ function App() {
 		setLoading(true);
 		try {
 			const data = await api.get(`/people/${credentials.IdNumber}/${credentials.phoneNumber}`);
+			data.data.birthDate = moment(data.data.birthDate).format("yyyy-MM-DD");
+			data.data.children.forEach((child) => {
+				child.birthDate = moment(child.birthDate).format("yyyy-MM-DD");
+			});
 			setUser(data.data);
 		} catch (e) {
 			throw new Error(e.response.data);
@@ -79,9 +84,7 @@ function App() {
 					{!loggedInUser.hasOwnProperty("name") ? (
 						<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
 					) : (
-						<p>
-							{`Welcome ${loggedInUser.name}`} <CustomButton onClick={onLogout} text="Logout" />
-						</p>
+						<Dashboard />
 					)}
 				</Route>
 				<Route path="/form">

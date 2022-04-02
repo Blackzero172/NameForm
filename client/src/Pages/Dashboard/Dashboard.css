@@ -1,0 +1,17 @@
+.dashboard .search-bar {
+	width: 100%;
+}
+.dashboard .search-bar .input-container {
+	align-items: flex-end;
+}
+.dashboard .search-bar .input-container label {
+	padding-right: 1rem;
+}
+.dashboard .search-bar input {
+	width: 90%;
+	text-align: right;
+	padding-right: 1rem;
+}
+.dashboard .search-bar input::placeholder {
+	text-align: right;
+}
