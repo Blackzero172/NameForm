@@ -62,7 +62,7 @@
 @keyframes Dot {
 	10% {
 		transform: translateY(-20px);
-		background-color: #ff0000;
+		background-color: var(--main-color);
 	}
 	50% {
 		transform: translateY(0px);

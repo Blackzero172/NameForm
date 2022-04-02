@@ -1,16 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&display=swap");
 :root {
-  --main-color: darkred;
-  --main-color-active: #5a0000;
-  --secondary-color: white;
-  --secondary-color-active: #c8c8c8;
+	--main-color: darkgreen;
+	--main-color-active: #003300;
+	--secondary-color: white;
+	--secondary-color-active: #c8c8c8;
 }
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: "Outfit", Courier, monospace;
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Outfit", Courier, monospace;
 }
 ul {
-  list-style: none;
+	list-style: none;
 }
