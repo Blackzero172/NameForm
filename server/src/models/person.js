@@ -5,20 +5,10 @@ const childSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	IdNumber: {
-		type: String,
-		required: true,
-		validate(val) {
-			if (!validator.isIdentityCard(val, "he-IL")) {
-				throw new Error("Invalid ID number");
-			}
-		},
-		unique: true,
-	},
 	phoneNumber: {
 		type: String,
 		validate(val) {
-			if (!validator.isPhoneNumber(val, "he-IL")) throw new Error("Invalid Phone Number");
+			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
 		},
 	},
 	birthDate: {
@@ -47,6 +37,10 @@ const personSchema = mongoose.Schema({
 		validate(val) {
 			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
 		},
+	},
+	birthDate: {
+		type: Date,
+		required: true,
 	},
 	children: [childSchema],
 });

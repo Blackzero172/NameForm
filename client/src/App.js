@@ -22,7 +22,6 @@ function App() {
 	const onLogin = async () => {
 		setLoading(true);
 		try {
-			console.log(credentials);
 			const res = await api.post("/users/login", credentials);
 			const user = res.data.user;
 			setUser(user);
@@ -35,9 +34,21 @@ function App() {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const data = await api.get(`/people/${credentials.IdNumber}`);
+			const data = await api.get(`/people/${credentials.IdNumber}/${credentials.phoneNumber}`);
 			setUser(data.data);
 		} catch (e) {
+			throw new Error(e.response.data);
+		} finally {
+			setLoading(false);
+		}
+	};
+	const updatePerson = async () => {
+		setLoading(true);
+		try {
+			const response = await api.put("/people", loggedInUser);
+			return response.data;
+		} catch (e) {
+			throw new Error(e.response.data);
 		} finally {
 			setLoading(false);
 		}
@@ -80,6 +91,7 @@ function App() {
 						getPerson={getData}
 						person={loggedInUser}
 						setUser={setUser}
+						updatePerson={updatePerson}
 					/>
 				</Route>
 			</Switch>

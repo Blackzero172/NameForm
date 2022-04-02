@@ -5,6 +5,5 @@
 	background-color: var(--main-color);
 	color: var(--secondary-color);
 	padding: 1rem;
-	width: 90%;
 	flex-wrap: wrap;
 }

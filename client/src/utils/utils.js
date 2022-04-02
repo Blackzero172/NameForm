@@ -1,5 +1,4 @@
 import api from "../api/api";
-import moment from "moment";
 const getUsers = async () => {
 	const users = await api.get("/users");
 	return users;

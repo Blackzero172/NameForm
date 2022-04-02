@@ -1,3 +1,22 @@
 .form-page {
-	height: 100vh;
+	min-height: 100vh;
+	padding: 1rem 0;
+	flex-wrap: wrap;
+}
+.form-page .input-container input {
+	width: 80%;
+}
+.form-page .input-container {
+	width: 50%;
+}
+.form-page input[type="Date"] {
+	text-indent: 0.4rem;
+}
+button:hover {
+	border-color: var(--main-color);
+}
+@media screen and (max-width: 768px) {
+	.window {
+		width: 90%;
+	}
 }
