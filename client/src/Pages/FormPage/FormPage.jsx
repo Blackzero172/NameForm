@@ -1,5 +1,5 @@
 import { debounce } from "debounce";
-import moment from "moment";
+import { isMobilePhone, isIdentityCard, isAlpha, isBefore } from "validator";
 import { useRef, useState } from "react";
 import ChildCard from "../../components/ChildCard/ChildCard";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
@@ -7,11 +7,13 @@ import CustomInput from "../../components/CustomInput/CustomInput.components";
 
 import "./FormPage.css";
 const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, updatePerson }) => {
-	const { IdNumber } = credentials;
-	const { name, phoneNumber, children, birthDate } = person;
+	const { IdNumber, phoneNumber } = credentials;
+	const { name, children, birthDate } = person;
 	const remoteIdNumber = person.IdNumber;
+	const remotePhoneNumber = person.phoneNumber;
 	const errorMessageRef = useRef();
 	const [personCopy, setCopy] = useState({});
+	const [formHasError, setError] = useState(true);
 	const setText = debounce(() => {
 		errorMessageRef.current.innerText = "";
 	}, 4000);
@@ -29,8 +31,27 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		e.preventDefault();
 		try {
 			await getPerson();
+			setError(true);
 		} catch (e) {
 			handleErrorMessage(e);
+		}
+	};
+	const handleIncorrectFields = () => {
+		if (isMobilePhone(phoneNumber, "he-IL") && isIdentityCard(IdNumber, "he-IL")) setError(false);
+		else setError(true);
+	};
+	const checkField = (e) => {
+		if (
+			(isIdentityCard(e.target.value, "he-IL") ||
+				isMobilePhone(e.target.value, "he-IL") ||
+				isAlpha(e.target.value) ||
+				isBefore(e.target.value)) &&
+			e.target.value !== ""
+		) {
+			e.target.classList.remove("error");
+		} else {
+			e.target.classList.add("error");
+			setError(true);
 		}
 	};
 	const changeChildInfo = (child, prop, value) => {
@@ -48,16 +69,25 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 					onChange={(e) => {
 						setCredentials({ ...credentials, IdNumber: e.target.value });
 					}}
+					onBlur={(e) => {
+						handleIncorrectFields();
+						checkField(e);
+					}}
 				/>
 				<CustomInput
 					label="رقم الهاتف"
 					value={phoneNumber}
 					onChange={(e) => {
 						setCredentials({ ...credentials, phoneNumber: e.target.value });
+						checkField(e);
+					}}
+					onBlur={(e) => {
+						handleIncorrectFields();
+						checkField(e);
 					}}
 				/>
 				<p className="error-message red" ref={errorMessageRef}></p>
-				<CustomButton text="الدخول" type="submit" />
+				<CustomButton text="الدخول" type="submit" disabled={formHasError} />
 			</div>
 		</form>
 	) : (
@@ -82,13 +112,22 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 								value={name}
 								onChange={(e) => {
 									setUser({ ...person, name: e.target.value });
+									checkField(e);
+								}}
+								onBlur={(e) => {
+									handleIncorrectFields();
+									checkField(e);
 								}}
 							/>
 							<CustomInput
 								label="رقم الهاتف"
-								value={phoneNumber}
+								value={remotePhoneNumber}
 								onChange={(e) => {
 									setUser({ ...person, phoneNumber: e.target.value });
+								}}
+								onBlur={(e) => {
+									handleIncorrectFields();
+									checkField(e);
 								}}
 							/>
 						</div>
@@ -98,6 +137,10 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 								value={remoteIdNumber}
 								onChange={(e) => {
 									setUser({ ...person, IdNumber: e.target.value });
+								}}
+								onBlur={(e) => {
+									handleIncorrectFields();
+									checkField(e);
 								}}
 							/>
 							<CustomInput
@@ -133,14 +176,27 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 							onChange={(e) => {
 								setUser({ ...person, birthDate: e.target.value });
 							}}
+							onBlur={(e) => {
+								handleIncorrectFields();
+								checkField(e);
+							}}
 						/>
 					</div>
 
 					{children.map((child) => {
-						return <ChildCard child={child} onChange={changeChildInfo} />;
+						return (
+							<ChildCard
+								child={child}
+								onChange={changeChildInfo}
+								onBlur={(e) => {
+									handleIncorrectFields();
+									checkField(e);
+								}}
+							/>
+						);
 					})}
 					<p className="error-message red" ref={errorMessageRef}></p>
-					<CustomButton text="ارسال" type="submit" />
+					<CustomButton text="ارسال" type="submit" disabled={formHasError} />
 				</>
 			) : (
 				"!تم ارسال المعلومات بنجاح"

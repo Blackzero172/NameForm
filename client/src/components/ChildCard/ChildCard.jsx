@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import { onNumberInputChange } from "../../utils/utils";
 import CustomInput from "../CustomInput/CustomInput.components";
 
 import "./ChildCard.css";
-const ChildCard = ({ child, onChange }) => {
+const ChildCard = ({ child, onChange, onBlur }) => {
 	const { name, phoneNumber, birthDate } = child;
 	return (
 		<div className="child-card flex-both">
@@ -14,14 +15,14 @@ const ChildCard = ({ child, onChange }) => {
 						value={phoneNumber}
 						onChange={(e) => {
 							onNumberInputChange(e);
-							onChange(child, "phoneNumber", e.target.value);
+							onChange(child, "phoneNumber", e.target.value, e);
 						}}
 					/>
 					<CustomInput
 						label="الاسم"
 						value={name}
 						onChange={(e) => {
-							onChange(child, "name", e.target.value);
+							onChange(child, "name", e.target.value, e);
 						}}
 					/>
 				</div>
