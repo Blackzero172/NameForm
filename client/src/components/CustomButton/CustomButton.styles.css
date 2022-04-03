@@ -30,13 +30,15 @@ button i {
 	pointer-events: none;
 }
 button.alt {
-	width: 100%;
 	border-radius: 0;
 	border: 2px solid var(--main-color);
 	color: var(--main-color);
 	text-align: left;
 	background-color: transparent;
-	text-indent: 0.5rem;
+}
+button.alt.selected {
+	color: var(--secondary-color);
+	background-color: var(--main-color);
 }
 button.alt:hover {
 	color: var(--secondary-color);

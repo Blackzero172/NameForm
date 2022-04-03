@@ -19,12 +19,15 @@ const personSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		validate(val) {
-			if (!validator.isMobilePhone(val, "he-IL"))
-				throw new Error("Invalid Phone Number");
+			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
 		},
 	},
 	birthDate: {
 		type: Date,
+		required: true,
+	},
+	age: {
+		type: Number,
 		required: true,
 	},
 	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Child" }],
@@ -35,6 +38,10 @@ personSchema.methods.toJSON = function () {
 
 	delete personObject._id;
 	delete personObject.__v;
+	personObject.children.forEach((child) => {
+		delete child.__v;
+		delete child._id;
+	});
 	return personObject;
 };
 const Person = mongoose.model("Person", personSchema);

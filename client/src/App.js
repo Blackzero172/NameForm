@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Spinner from "./components/Spinner/Spinner";
 import api from "./api/api";
@@ -40,10 +40,7 @@ function App() {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const data = await api.get(
-				`/people/${credentials.IdNumber}/${credentials.phoneNumber}`
-			);
-			console.log(data);
+			const data = await api.get(`/people/${credentials.IdNumber}/${credentials.phoneNumber}`);
 			data.data.birthDate = moment(data.data.birthDate).format("yyyy-MM-DD");
 			data.data.children.forEach((child) => {
 				child.birthDate = moment(child.birthDate).format("yyyy-MM-DD");
@@ -66,10 +63,7 @@ function App() {
 			setLoading(false);
 		}
 	};
-	useEffect(() => {
-		onLogin();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+
 	const onLogout = async () => {
 		setLoading(true);
 		try {
@@ -90,11 +84,7 @@ function App() {
 			<Switch>
 				<Route path="/" exact>
 					{!loggedInUser.hasOwnProperty("name") ? (
-						<LoginPage
-							setCredentials={setCredentials}
-							credentials={credentials}
-							onLogin={onLogin}
-						/>
+						<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
 					) : (
 						<Dashboard />
 					)}

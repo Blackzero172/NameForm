@@ -8,14 +8,24 @@ const childSchema = mongoose.Schema({
 	phoneNumber: {
 		type: String,
 		validate(val) {
-			if (!validator.isMobilePhone(val, "he-IL") && val !== "")
-				throw new Error("Invalid Phone Number");
+			if (!validator.isMobilePhone(val, "he-IL") && val !== "") throw new Error("Invalid Phone Number");
 		},
 	},
 	birthDate: {
 		type: Date,
 		required: true,
 	},
+	age: {
+		type: Number,
+		required: true,
+	},
 });
+childSchema.methods.toJSON = function () {
+	const child = this;
+	const childObject = child.toObject();
+
+	delete childObject.__v;
+	return childObject;
+};
 const Child = mongoose.model("Child", childSchema);
 module.exports = Child;

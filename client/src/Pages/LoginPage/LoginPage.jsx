@@ -1,12 +1,16 @@
 import CustomInput from "../../components/CustomInput/CustomInput.components";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import "./LoginPage.css";
+import { useEffect } from "react";
 const LoginPage = ({ setCredentials, credentials, onLogin }) => {
 	const { email, password } = credentials;
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 		onLogin();
 	};
+	useEffect(() => {
+		onLogin();
+	}, []);
 	return (
 		<form className="login-page flex-both" onSubmit={handleFormSubmit}>
 			<div className="window flex-both flex-column">

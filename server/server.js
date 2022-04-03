@@ -18,9 +18,9 @@ server.use(cors(corsOptions));
 server.use(cookieParser());
 server.use("/api", Router);
 server.use(express.static(getReact()));
-server.get("*", (req, res) => {
-	res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
-});
+// server.get("*", (req, res) => {
+// 	res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+// });
 
 server.listen(port, () => {
 	console.log(`Server is up and listening on port ${port}`);

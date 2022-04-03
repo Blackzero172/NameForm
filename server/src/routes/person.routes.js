@@ -1,9 +1,10 @@
 const express = require("express");
-const { getPerson, editPerson } = require("../controllers/person.controllers");
+const { getAllPeople, getPerson, editPerson } = require("../controllers/person.controllers");
 
 const PersonRouter = express.Router();
 
 PersonRouter.get("/people/:IdNumber/:phoneNumber", getPerson);
+PersonRouter.get("/people/:isTree", getAllPeople);
 
 PersonRouter.put("/people", editPerson);
 

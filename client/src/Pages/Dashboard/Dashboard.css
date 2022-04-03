@@ -1,18 +1,44 @@
 .dashboard .search-bar {
 	width: 100%;
 }
-.dashboard .search-bar .input-container {
+.dashboard .input-container {
 	align-items: flex-end;
 	padding-left: 2rem;
 }
-.dashboard .search-bar .input-container label {
+.dashboard .input-container label {
 	padding-right: 1rem;
 }
-.dashboard .search-bar input {
+.dashboard input {
 	width: 100%;
 	text-align: right;
 	padding-right: 1rem;
 }
-.dashboard .search-bar input::placeholder {
+.dashboard input::placeholder {
 	text-align: right;
+}
+.dashboard .upper-section {
+	width: 100%;
+	background-color: var(--main-color);
+	color: var(--secondary-color);
+}
+.dashboard .age-btns {
+	width: 100%;
+	padding: 0 0 1rem;
+}
+.dashboard .age-btns .right-section > div:not(.input-container) {
+	bottom: 0.6rem;
+	text-indent: 0.5rem;
+	color: black;
+	padding-left: 1rem;
+}
+.dashboard .age-btns .input-container {
+	width: 30%;
+}
+@media screen and (max-width: 528px) {
+	.dashboard .age-btns {
+		flex-direction: column;
+	}
+	.dashboard .left-section {
+		padding-right: 1rem;
+	}
 }
