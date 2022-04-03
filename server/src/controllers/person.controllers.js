@@ -74,7 +74,7 @@ const editPerson = async (req, res) => {
 			person.birthDate = birthDate;
 			person.name = name;
 			person.phoneNumber = phoneNumber;
-			children.map(async (child) => {
+			children.forEach(async (child) => {
 				child.age = moment().diff(child.birthDate, "years", true);
 				let newChild = await Child.findById(child._id);
 				if (!newChild) newChild = new Child(child);
