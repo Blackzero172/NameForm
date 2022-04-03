@@ -170,6 +170,7 @@ const FormPage = ({
 							<CustomInput
 								type="number"
 								label="عدد الاطفال"
+								defaultValue={children.length}
 								onChange={(e) => {
 									if (e.target.value > 10) {
 										e.target.value = 10;
