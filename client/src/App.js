@@ -12,7 +12,12 @@ import "./App.css";
 
 function App() {
 	const [loggedInUser, setUser] = useState({});
-	const [credentials, setCredentials] = useState({ email: "", password: "", phoneNumber: "", IdNumber: "" });
+	const [credentials, setCredentials] = useState({
+		email: "",
+		password: "",
+		phoneNumber: "",
+		IdNumber: "",
+	});
 	const spinnerRef = useRef();
 
 	const setLoading = (isShown) => {
@@ -35,7 +40,10 @@ function App() {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const data = await api.get(`/people/${credentials.IdNumber}/${credentials.phoneNumber}`);
+			const data = await api.get(
+				`/people/${credentials.IdNumber}/${credentials.phoneNumber}`
+			);
+			console.log(data);
 			data.data.birthDate = moment(data.data.birthDate).format("yyyy-MM-DD");
 			data.data.children.forEach((child) => {
 				child.birthDate = moment(child.birthDate).format("yyyy-MM-DD");
@@ -82,7 +90,11 @@ function App() {
 			<Switch>
 				<Route path="/" exact>
 					{!loggedInUser.hasOwnProperty("name") ? (
-						<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
+						<LoginPage
+							setCredentials={setCredentials}
+							credentials={credentials}
+							onLogin={onLogin}
+						/>
 					) : (
 						<Dashboard />
 					)}

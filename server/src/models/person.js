@@ -1,21 +1,5 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const childSchema = mongoose.Schema({
-	name: {
-		type: String,
-		required: true,
-	},
-	phoneNumber: {
-		type: String,
-		validate(val) {
-			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
-		},
-	},
-	birthDate: {
-		type: Date,
-		required: true,
-	},
-});
 const personSchema = mongoose.Schema({
 	name: {
 		type: String,
@@ -35,14 +19,15 @@ const personSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		validate(val) {
-			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
+			if (!validator.isMobilePhone(val, "he-IL"))
+				throw new Error("Invalid Phone Number");
 		},
 	},
 	birthDate: {
 		type: Date,
 		required: true,
 	},
-	children: [childSchema],
+	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Child" }],
 });
 personSchema.methods.toJSON = function () {
 	const person = this;

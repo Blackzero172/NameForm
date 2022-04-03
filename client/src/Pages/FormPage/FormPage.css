@@ -20,7 +20,10 @@ button:disabled {
 	border-color: darkgray;
 }
 .window {
-	width: 20%;
+	width: 30%;
+}
+.child-card {
+	width: 100%;
 }
 @media screen and (max-width: 768px) {
 	.window {

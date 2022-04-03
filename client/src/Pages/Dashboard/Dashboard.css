@@ -3,12 +3,13 @@
 }
 .dashboard .search-bar .input-container {
 	align-items: flex-end;
+	padding-left: 2rem;
 }
 .dashboard .search-bar .input-container label {
 	padding-right: 1rem;
 }
 .dashboard .search-bar input {
-	width: 90%;
+	width: 100%;
 	text-align: right;
 	padding-right: 1rem;
 }

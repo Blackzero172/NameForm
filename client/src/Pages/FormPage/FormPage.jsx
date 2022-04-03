@@ -1,4 +1,5 @@
 import { debounce } from "debounce";
+import mongoose from "mongoose";
 import { isMobilePhone, isIdentityCard, isAlpha, isBefore } from "validator";
 import { useRef, useState } from "react";
 import ChildCard from "../../components/ChildCard/ChildCard";
@@ -6,7 +7,14 @@ import CustomButton from "../../components/CustomButton/CustomButton.components"
 import CustomInput from "../../components/CustomInput/CustomInput.components";
 
 import "./FormPage.css";
-const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, updatePerson }) => {
+const FormPage = ({
+	setCredentials,
+	credentials,
+	getPerson,
+	person,
+	setUser,
+	updatePerson,
+}) => {
 	const { IdNumber, phoneNumber } = credentials;
 	const { name, children, birthDate } = person;
 	const remoteIdNumber = person.IdNumber;
@@ -31,13 +39,17 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		e.preventDefault();
 		try {
 			await getPerson();
-			setError(true);
+			handleIncorrectFields();
 		} catch (e) {
 			handleErrorMessage(e);
 		}
 	};
 	const handleIncorrectFields = () => {
-		if (!person.name && isMobilePhone(phoneNumber, "he-IL") && isIdentityCard(IdNumber, "he-IL"))
+		if (
+			!person.name &&
+			isMobilePhone(phoneNumber, "he-IL") &&
+			isIdentityCard(IdNumber, "he-IL")
+		)
 			setError(false);
 		else if (
 			person.name &&
@@ -70,7 +82,10 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		setUser({ ...person, children: childrenCopy });
 	};
 	return !person.hasOwnProperty("name") ? (
-		<form className="form-page flex-both flex-column" onSubmit={handleFormSubmit}>
+		<form
+			className="form-page flex-both flex-column"
+			onSubmit={handleFormSubmit}
+		>
 			<div className="window flex-both flex-column">
 				<CustomInput
 					label="رقم الهوية"
@@ -168,6 +183,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 												name: "",
 												phoneNumber: "",
 												birthDate: "",
+												_id: new mongoose.Types.ObjectId(),
 											});
 										}
 										setUser({
