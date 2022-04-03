@@ -7,6 +7,8 @@ const personSchema = mongoose.Schema({
 	},
 	email: {
 		type: String,
+				lowercase:true;
+
 		required: true,
 		unique: true,
 	},
