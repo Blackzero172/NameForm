@@ -4,17 +4,17 @@ const Child = require("../models/child");
 const moment = require("moment");
 const getPerson = async (req, res) => {
 	try {
-		const { IdNumber, phoneNumber } = req.body;
-		if (!validator.isIdentityCard(IdNumber, "he-IL")) return res.status(400).send("Invalid ID number");
+		const { email, phoneNumber } = req.body;
+		if (!validator.isEmail(email)) return res.status(400).send("Invalid Email");
 		if (!validator.isMobilePhone(phoneNumber, "he-IL")) return res.status(400).send("Invalid Phone Number");
 		const person = await Person.findOne({
-			IdNumber: IdNumber,
+			email: email,
 			phoneNumber: phoneNumber,
 		}).populate("children");
 		if (!person)
 			return res.send({
 				name: "",
-				IdNumber,
+				email,
 				phoneNumber,
 				children: [],
 				birthDate: new Date(),
@@ -42,18 +42,27 @@ const getAllPeople = async (req, res) => {
 			child.save();
 		})
 	);
+
+	children = children.filter(
+		(child) =>
+			!people.find(
+				(person) =>
+					person.email === child.email &&
+					person.phoneNumber === child.phoneNumber &&
+					person.birthDate === child.birthDate
+			)
+	);
 	if (people.length < 1) return res.status(404).send("No Data Found");
 	res.send([...people, ...children]);
 };
 const editPerson = async (req, res) => {
 	try {
-		const { IdNumber, name, phoneNumber, children, birthDate } = req.body;
-		let person = await Person.findOne({ IdNumber: IdNumber });
-		let child = await Child.findOne({});
+		const { email, name, phoneNumber, children, birthDate } = req.body;
+		let person = await Person.findOne({ email: email });
 		if (!person) {
 			person = new Person({
 				name,
-				IdNumber,
+				email,
 				phoneNumber,
 				children,
 				birthDate,
@@ -61,7 +70,7 @@ const editPerson = async (req, res) => {
 			});
 			await person.save();
 		} else {
-			person.IdNumber = IdNumber;
+			person.email = email;
 			person.birthDate = birthDate;
 			person.name = name;
 			person.phoneNumber = phoneNumber;

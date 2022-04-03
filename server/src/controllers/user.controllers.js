@@ -22,11 +22,11 @@ const getProfile = (req, res) => {
 
 const editUser = async (req, res) => {
 	try {
-		const { userID, newName, newIdNumber, newPhoneNumber } = req.body;
-		const user = await User.findOne({ IdNumber: userID });
+		const { userID, newName, newemail, newPhoneNumber } = req.body;
+		const user = await User.findOne({ email: userID });
 		if (!user) return res.status(404).send("User not found");
 		user.name = newName;
-		user.IdNumber = newIdNumber;
+		user.email = newemail;
 		user.phoneNumber = newPhoneNumber;
 		await user.save();
 		res.send(user);
@@ -36,10 +36,9 @@ const editUser = async (req, res) => {
 };
 const editProfile = async (req, res) => {
 	const user = req.user;
-	const { newName, newEmail, newPassword, newIdNumber } = req.body;
+	const { newName, newemail, newPassword } = req.body;
 	user.name = newName;
-	user.email = newEmail;
-	user.IdNumber = newIdNumber;
+	user.email = newemail;
 	if (newPassword !== "" && newPassword) {
 		user.password = newPassword;
 	}

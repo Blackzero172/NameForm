@@ -7,9 +7,9 @@ import CustomInput from "../../components/CustomInput/CustomInput.components";
 
 import "./FormPage.css";
 const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, updatePerson }) => {
-	const { IdNumber, phoneNumber, secretKey } = credentials;
+	const { email, phoneNumber, secretKey } = credentials;
 	const { name, children, birthDate } = person;
-	const remoteIdNumber = person.IdNumber;
+	const remoteEmail = person.email;
 	const remotePhoneNumber = person.phoneNumber;
 	const errorMessageRef = useRef();
 	const [personCopy, setCopy] = useState({});
@@ -18,8 +18,8 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 	}, 4000);
 	const handleErrorMessage = (e) => {
 		console.log(e.message);
-		errorMessageRef.current.innerText = e.message.includes("ID number")
-			? "رقم الهوية خطء"
+		errorMessageRef.current.innerText = e.message.includes("Email")
+			? "البريد الالكتروني خطء"
 			: e.message.includes("Phone Number")
 			? "رقم الهاتف خطء"
 			: "المفتاح خطء";
@@ -45,12 +45,11 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		<form className="form-page flex-both flex-column" onSubmit={handleFormSubmit}>
 			<div className="window flex-both flex-column">
 				<CustomInput
-					type="number"
 					required
-					label="رقم الهوية"
-					value={IdNumber}
+					label="البريد الالكتروني"
+					value={email}
 					onChange={(e) => {
-						setCredentials({ ...credentials, IdNumber: e.target.value });
+						setCredentials({ ...credentials, email: e.target.value });
 					}}
 				/>
 				<CustomInput
@@ -111,10 +110,10 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						<div className="lower-section flex-both">
 							<CustomInput
 								required
-								label="رقم الهوية"
-								value={remoteIdNumber}
+								label="البريد الالكتروني"
+								value={remoteEmail}
 								onChange={(e) => {
-									setUser({ ...person, IdNumber: e.target.value });
+									setUser({ ...person, email: e.target.value });
 								}}
 							/>
 							<CustomInput

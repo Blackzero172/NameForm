@@ -16,7 +16,6 @@ function App() {
 		email: "",
 		password: "",
 		phoneNumber: "",
-		IdNumber: "",
 		secretKey: "",
 	});
 	const spinnerRef = useRef();

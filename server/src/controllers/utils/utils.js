@@ -9,7 +9,7 @@ const getReact = () => {
 const getUsers = async (email) => {
 	if (email) {
 		if (validator.isEmail(email)) return User.find({ email });
-		else throw new Error("Email is invalid");
+		else throw new Error("email is invalid");
 	} else return User.find({});
 };
 const addUser = async (user) => {

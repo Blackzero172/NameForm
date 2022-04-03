@@ -5,14 +5,9 @@ const personSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	IdNumber: {
+	email: {
 		type: String,
 		required: true,
-		validate(val) {
-			if (!validator.isIdentityCard(val, "he-IL")) {
-				throw new Error("Invalid ID number");
-			}
-		},
 		unique: true,
 	},
 	phoneNumber: {

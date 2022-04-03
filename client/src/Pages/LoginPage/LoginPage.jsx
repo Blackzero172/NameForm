@@ -17,12 +17,12 @@ const LoginPage = ({ setCredentials, credentials, onLogin }) => {
 			<div className="window flex-both flex-column">
 				<label>تسجيل الدخول</label>
 				<CustomInput
-					label="الايميل"
+					label="البريد الالكتروني"
 					value={email}
 					onChange={(e) => {
 						setCredentials({ ...credentials, email: e.target.value });
 					}}
-					name="Email"
+					name="email"
 				/>
 				<CustomInput
 					type="password"
