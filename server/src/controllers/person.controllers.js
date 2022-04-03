@@ -4,7 +4,7 @@ const Child = require("../models/child");
 const moment = require("moment");
 const getPerson = async (req, res) => {
 	try {
-		const { IdNumber, phoneNumber } = req.params;
+		const { IdNumber, phoneNumber } = req.body;
 		if (!validator.isIdentityCard(IdNumber, "he-IL")) return res.status(400).send("Invalid ID number");
 		if (!validator.isMobilePhone(phoneNumber, "he-IL")) return res.status(400).send("Invalid Phone Number");
 		const person = await Person.findOne({
@@ -26,46 +26,30 @@ const getPerson = async (req, res) => {
 	}
 };
 const getAllPeople = async (req, res) => {
-	const { isTree } = req.params;
 	let people = [];
 	let children = [];
-	if (isTree === "false") {
-		people = await Person.find({});
-		await Promise.all(
-			people.map((person) => {
-				person.age = moment().diff(pesron.birthDate, "years", true);
-				person.save();
-			})
-		);
-		children = await Child.find({});
-		await Promise.all(
-			children.map((child) => {
-				child.age = moment().diff(child.birthDate, "years", true);
-				child.save();
-			})
-		);
-	} else {
-		people = await Person.find({}).populate("children");
-		await Promise.all(
-			people.map(async (person) => {
-				person.age = moment().diff(person.birthDate, "years", true);
-				person.save();
-				await Promise.all(
-					person.children.map((child) => {
-						child.age = moment().diff(child.birthDate, "years", true);
-						child.save();
-					})
-				);
-			})
-		);
-	}
+	people = await Person.find({}).populate("children");
+	await Promise.all(
+		people.map((person) => {
+			person.age = moment().diff(person.birthDate, "years", true);
+			person.save();
+		})
+	);
+	children = await Child.find({});
+	await Promise.all(
+		children.map((child) => {
+			child.age = moment().diff(child.birthDate, "years", true);
+			child.save();
+		})
+	);
 	if (people.length < 1) return res.status(404).send("No Data Found");
-	res.send({ people, children });
+	res.send([...people, ...children]);
 };
 const editPerson = async (req, res) => {
 	try {
 		const { IdNumber, name, phoneNumber, children, birthDate } = req.body;
 		let person = await Person.findOne({ IdNumber: IdNumber });
+		let child = await Child.findOne({});
 		if (!person) {
 			person = new Person({
 				name,

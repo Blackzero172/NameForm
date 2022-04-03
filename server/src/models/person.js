@@ -32,17 +32,6 @@ const personSchema = mongoose.Schema({
 	},
 	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Child" }],
 });
-personSchema.methods.toJSON = function () {
-	const person = this;
-	const personObject = person.toObject();
 
-	delete personObject._id;
-	delete personObject.__v;
-	personObject.children.forEach((child) => {
-		delete child.__v;
-		delete child._id;
-	});
-	return personObject;
-};
 const Person = mongoose.model("Person", personSchema);
 module.exports = Person;
