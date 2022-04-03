@@ -8,7 +8,7 @@ const getPerson = async (req, res) => {
 		if (!validator.isEmail(email)) return res.status(400).send("Invalid Email");
 		if (!validator.isMobilePhone(phoneNumber, "he-IL")) return res.status(400).send("Invalid Phone Number");
 		const person = await Person.findOne({
-			email: email,
+			email: email.toLowerCase(),
 			phoneNumber: phoneNumber,
 		}).populate("children");
 		if (!person)
