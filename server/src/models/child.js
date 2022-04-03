@@ -7,9 +7,13 @@ const childSchema = mongoose.Schema({
 	},
 	email: {
 		type: String,
-		lowercase: true,
 		required: true,
 		unique: true,
+		lowercase: true,
+		trim: true,
+		validate(val) {
+			if (!validator.isEmail(val)) throw new Error("Invalid Email");
+		},
 	},
 	phoneNumber: {
 		type: String,

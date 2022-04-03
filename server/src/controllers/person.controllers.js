@@ -74,7 +74,7 @@ const editPerson = async (req, res) => {
 			person.birthDate = birthDate;
 			person.name = name;
 			person.phoneNumber = phoneNumber;
-			children.forEach(async (child) => {
+			children.map(async (child) => {
 				child.age = moment().diff(child.birthDate, "years", true);
 				let newChild = await Child.findById(child._id);
 				if (!newChild) newChild = new Child(child);
@@ -85,8 +85,7 @@ const editPerson = async (req, res) => {
 					newChild.age = child.age;
 				}
 				await newChild.save();
-			});
-			(person.age = moment().diff(birthDate, "years", true)),
+			})((person.age = moment().diff(birthDate, "years", true))),
 				(person.children = children.map((child) => {
 					return child._id;
 				}));
