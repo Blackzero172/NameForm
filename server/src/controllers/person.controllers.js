@@ -74,22 +74,27 @@ const editPerson = async (req, res) => {
 			person.birthDate = birthDate;
 			person.name = name;
 			person.phoneNumber = phoneNumber;
-			children.forEach(async (child) => {
-				child.age = moment().diff(child.birthDate, "years", true);
-				let newChild = await Child.findById(child._id);
-				if (!newChild) newChild = new Child(child);
-				else {
-					newChild.name = child.name;
-					newChild.birthDate = child.birthDate;
-					newChild.phoneNumber = child.phoneNumber;
-					newChild.age = child.age;
-				}
-				await newChild.save();
-			})((person.age = moment().diff(birthDate, "years", true))),
-				(person.children = children.map((child) => {
-					return child._id;
-				}));
-			await person.save();
+			try {
+				children.forEach(async (child) => {
+					child.age = moment().diff(child.birthDate, "years", true);
+					let newChild = await Child.findById(child._id);
+					if (!newChild) newChild = new Child(child);
+					else {
+						newChild.name = child.name;
+						newChild.birthDate = child.birthDate;
+						newChild.phoneNumber = child.phoneNumber;
+						newChild.age = child.age;
+					}
+					await newChild.save();
+				});
+				(person.age = moment().diff(birthDate, "years", true)),
+					(person.children = children.map((child) => {
+						return child._id;
+					}));
+				await person.save();
+			} catch (e) {
+				console.log(e);
+			}
 		}
 		res.send(person);
 	} catch (e) {

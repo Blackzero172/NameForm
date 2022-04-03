@@ -1,6 +1,7 @@
 import { debounce } from "debounce";
 import mongoose from "mongoose";
 import { useRef, useState } from "react";
+import { isAlpha, isBefore, isMobilePhone, isEmail } from "validator";
 import ChildCard from "../../components/ChildCard/ChildCard";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
@@ -19,10 +20,12 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 	const handleErrorMessage = (e) => {
 		console.log(e.message);
 		errorMessageRef.current.innerText = e.message.includes("Email")
-			? "البريد الالكتروني خطء"
+			? "البريد الالكتروني غير صحيح"
 			: e.message.includes("Phone Number")
-			? "رقم الهاتف خطء"
-			: "المفتاح خطء";
+			? "رقم الهاتف غير صحيح"
+			: e.message.includes("Wrong Key")
+			? "المفتاح غير صحيح"
+			: e.message;
 		setText.clear();
 		setText();
 	};
@@ -56,6 +59,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 					required
 					type="number"
 					label="رقم الهاتف"
+					minlength="10"
 					value={phoneNumber}
 					onChange={(e) => {
 						setCredentials({ ...credentials, phoneNumber: e.target.value });
@@ -79,8 +83,37 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 			onSubmit={async (e) => {
 				e.preventDefault();
 				try {
-					const response = await updatePerson();
-					setCopy(response);
+					if (
+						isAlpha(name) &&
+						isBefore(birthDate, new Date().toString()) &&
+						isMobilePhone(phoneNumber, "he-IL") &&
+						isEmail(email)
+					) {
+						const filter = children.filter((child) => {
+							return (
+								!isAlpha(child.name) ||
+								!isBefore(child.birthDate, new Date().toString()) ||
+								!isMobilePhone(child.phoneNumber, "he-IL") ||
+								!isEmail(child.email)
+							);
+						});
+						console.log(filter);
+						if (filter.length < 1) {
+							const response = await updatePerson();
+							setCopy(response);
+						} else {
+							if (!isAlpha(filter[0].name)) throw new Error("لا يمكن ان يتواجد غير احرف في الاسم");
+							else if (!isBefore(filter[0].birthDate, new Date().toString()))
+								throw new Error("تاريخ الميلاد غير صحيح");
+							else if (!isMobilePhone(filter[0].phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
+							else if (!isEmail(filter[0].email)) throw new Error("البريد الالكتروني غير صحيح");
+						}
+					} else {
+						if (!isAlpha(name)) throw new Error("لا يمكن ان يتواجد غير احرف في الاسم");
+						else if (!isBefore(birthDate, new Date().toString())) throw new Error("تاريخ الميلاد غير صحيح");
+						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
+						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
+					}
 				} catch (e) {
 					handleErrorMessage(e);
 				}
@@ -101,6 +134,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 							<CustomInput
 								required
 								label="رقم الهاتف"
+								minlength="10"
 								value={remotePhoneNumber}
 								onChange={(e) => {
 									setUser({ ...person, phoneNumber: e.target.value });

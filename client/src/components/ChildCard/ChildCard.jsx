@@ -20,6 +20,7 @@ const ChildCard = ({ child, onChange }) => {
 						required
 						type="number"
 						label="رقم الهاتف"
+						minlength="10"
 						value={phoneNumber}
 						onChange={(e) => {
 							onNumberInputChange(e);
