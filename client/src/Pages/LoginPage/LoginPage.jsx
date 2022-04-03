@@ -10,6 +10,7 @@ const LoginPage = ({ setCredentials, credentials, onLogin }) => {
 	};
 	useEffect(() => {
 		onLogin();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<form className="login-page flex-both" onSubmit={handleFormSubmit}>

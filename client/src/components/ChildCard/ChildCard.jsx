@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { onNumberInputChange } from "../../utils/utils";
 import CustomInput from "../CustomInput/CustomInput.components";
 
@@ -10,6 +9,7 @@ const ChildCard = ({ child, onChange, onBlur }) => {
 			<div className="window flex-column">
 				<div className="upper-section flex">
 					<CustomInput
+						required
 						type="number"
 						label="رقم الهاتف"
 						value={phoneNumber}
@@ -19,6 +19,7 @@ const ChildCard = ({ child, onChange, onBlur }) => {
 						}}
 					/>
 					<CustomInput
+						required
 						label="الاسم"
 						value={name}
 						onChange={(e) => {
@@ -28,6 +29,7 @@ const ChildCard = ({ child, onChange, onBlur }) => {
 				</div>
 				<div className="lower-section flex-content">
 					<CustomInput
+						required
 						label="تاريخ الميلاد"
 						value={birthDate}
 						type="Date"

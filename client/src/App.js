@@ -17,6 +17,7 @@ function App() {
 		password: "",
 		phoneNumber: "",
 		IdNumber: "",
+		secretKey: "",
 	});
 	const spinnerRef = useRef();
 
@@ -40,7 +41,7 @@ function App() {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const data = await api.get(`/people/${credentials.IdNumber}/${credentials.phoneNumber}`);
+			const data = await api.post(`/people/`, credentials);
 			data.data.birthDate = moment(data.data.birthDate).format("yyyy-MM-DD");
 			data.data.children.forEach((child) => {
 				child.birthDate = moment(child.birthDate).format("yyyy-MM-DD");
@@ -64,21 +65,6 @@ function App() {
 		}
 	};
 
-	const onLogout = async () => {
-		setLoading(true);
-		try {
-			await api.post("/users/logout");
-			setUser({});
-		} catch (e) {
-			console.error(e.response.data);
-		} finally {
-			setLoading(false);
-		}
-	};
-	const getProfile = async () => {
-		const user = await api.get("/users/me");
-		setUser(user.data);
-	};
 	return (
 		<BrowserRouter>
 			<Switch>

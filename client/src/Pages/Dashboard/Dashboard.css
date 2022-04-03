@@ -16,7 +16,7 @@
 .dashboard input::placeholder {
 	text-align: right;
 }
-.dashboard .upper-section {
+.dashboard > .upper-section {
 	width: 100%;
 	background-color: var(--main-color);
 	color: var(--secondary-color);
@@ -33,6 +33,19 @@
 }
 .dashboard .age-btns .input-container {
 	width: 30%;
+}
+.dashboard .data-grid,
+.dashboard > .lower-section {
+	width: 100%;
+}
+.dashboard .data-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	gap: 0.25rem;
+	padding: 0 1rem;
+}
+.dashboard > .lower-section {
+	margin-top: 1rem;
 }
 @media screen and (max-width: 528px) {
 	.dashboard .age-btns {

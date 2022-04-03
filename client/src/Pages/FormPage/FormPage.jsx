@@ -7,7 +7,7 @@ import CustomInput from "../../components/CustomInput/CustomInput.components";
 
 import "./FormPage.css";
 const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, updatePerson }) => {
-	const { IdNumber, phoneNumber } = credentials;
+	const { IdNumber, phoneNumber, secretKey } = credentials;
 	const { name, children, birthDate } = person;
 	const remoteIdNumber = person.IdNumber;
 	const remotePhoneNumber = person.phoneNumber;
@@ -22,7 +22,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 			? "رقم الهوية خطء"
 			: e.message.includes("Phone Number")
 			? "رقم الهاتف خطء"
-			: "";
+			: "المفتاح خطء";
 		setText.clear();
 		setText();
 	};
@@ -45,6 +45,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		<form className="form-page flex-both flex-column" onSubmit={handleFormSubmit}>
 			<div className="window flex-both flex-column">
 				<CustomInput
+					type="number"
 					required
 					label="رقم الهوية"
 					value={IdNumber}
@@ -54,10 +55,19 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 				/>
 				<CustomInput
 					required
+					type="number"
 					label="رقم الهاتف"
 					value={phoneNumber}
 					onChange={(e) => {
 						setCredentials({ ...credentials, phoneNumber: e.target.value });
+					}}
+				/>
+				<CustomInput
+					required
+					label="المفتاح السري"
+					value={secretKey}
+					onChange={(e) => {
+						setCredentials({ ...credentials, secretKey: e.target.value });
 					}}
 				/>
 				<p className="error-message red" ref={errorMessageRef}></p>
@@ -144,12 +154,11 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 							onChange={(e) => {
 								setUser({ ...person, birthDate: e.target.value });
 							}}
-							onBlur={(e) => {}}
 						/>
 					</div>
 
 					{children.map((child) => {
-						return <ChildCard child={child} onChange={changeChildInfo} onBlur={(e) => {}} />;
+						return <ChildCard child={child} onChange={changeChildInfo} key={child._id} />;
 					})}
 					<p className="error-message red" ref={errorMessageRef}></p>
 					<CustomButton text="ارسال" type="submit" />

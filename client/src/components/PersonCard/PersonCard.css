@@ -1,0 +1,9 @@
+.person-card {
+	width: 100%;
+	background-color: var(--main-color);
+	color: var(--secondary-color);
+}
+.person-card > .upper-section,
+.person-card > .lower-section {
+	margin: 1rem;
+}
