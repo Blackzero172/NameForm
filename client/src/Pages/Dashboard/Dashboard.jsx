@@ -31,10 +31,13 @@ const Dashboard = () => {
 				const searchCondition = person.name.toLowerCase().includes(searchWord.toLowerCase());
 				if (ageFilter === ">" && ageNumber > 0 && searchCondition) return person.age > ageNumber;
 				else if (ageFilter === "<" && ageNumber > 0 && searchCondition) return person.age < ageNumber;
-				else if (ageFilter === "" || ageNumber === 0) return true;
+				else if (searchCondition) {
+					return true;
+				} else if ((ageFilter === "" || ageNumber === 0) && searchCondition) return true;
 				else return false;
 			})
 		);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ageFilter, ageNumber, searchWord]);
 
