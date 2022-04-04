@@ -84,33 +84,28 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 				e.preventDefault();
 				try {
 					if (
-						isAlpha(name) &&
 						isBefore(birthDate, new Date().toString()) &&
 						isMobilePhone(phoneNumber, "he-IL") &&
 						isEmail(email)
 					) {
 						const filter = children.filter((child) => {
 							return (
-								!isAlpha(child.name) ||
 								!isBefore(child.birthDate, new Date().toString()) ||
 								!isMobilePhone(child.phoneNumber, "he-IL") ||
 								!isEmail(child.email)
 							);
 						});
-						console.log(filter);
 						if (filter.length < 1) {
 							const response = await updatePerson();
 							setCopy(response);
 						} else {
-							if (!isAlpha(filter[0].name)) throw new Error("لا يمكن ان يتواجد غير احرف في الاسم");
-							else if (!isBefore(filter[0].birthDate, new Date().toString()))
+							if (!isBefore(filter[0].birthDate, new Date().toString()))
 								throw new Error("تاريخ الميلاد غير صحيح");
 							else if (!isMobilePhone(filter[0].phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 							else if (!isEmail(filter[0].email)) throw new Error("البريد الالكتروني غير صحيح");
 						}
 					} else {
-						if (!isAlpha(name)) throw new Error("لا يمكن ان يتواجد غير احرف في الاسم");
-						else if (!isBefore(birthDate, new Date().toString())) throw new Error("تاريخ الميلاد غير صحيح");
+						if (!isBefore(birthDate, new Date().toString())) throw new Error("تاريخ الميلاد غير صحيح");
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
 					}
