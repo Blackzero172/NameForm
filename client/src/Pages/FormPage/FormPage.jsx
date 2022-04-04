@@ -1,7 +1,8 @@
 import { debounce } from "debounce";
+import moment from "moment";
 import mongoose from "mongoose";
 import { useRef, useState } from "react";
-import { isAlpha, isBefore, isMobilePhone, isEmail } from "validator";
+import { isBefore, isMobilePhone, isEmail } from "validator";
 import ChildCard from "../../components/ChildCard/ChildCard";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
@@ -84,13 +85,13 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 				e.preventDefault();
 				try {
 					if (
-						isBefore(birthDate, new Date().toString()) &&
+						isBefore(birthDate, moment().format("yyyy-MM-DD")) &&
 						isMobilePhone(phoneNumber, "he-IL") &&
 						isEmail(email)
 					) {
 						const filter = children.filter((child) => {
 							return (
-								!isBefore(child.birthDate, new Date().toString()) ||
+								!isBefore(child.birthDate, moment().format("yyyy-MM-DD")) ||
 								!isMobilePhone(child.phoneNumber, "he-IL") ||
 								!isEmail(child.email)
 							);
@@ -99,13 +100,14 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 							const response = await updatePerson();
 							setCopy(response);
 						} else {
-							if (!isBefore(filter[0].birthDate, new Date().toString()))
+							if (!isBefore(filter[0].birthDate, moment().format("yyyy-MM-DD")))
 								throw new Error("تاريخ الميلاد غير صحيح");
 							else if (!isMobilePhone(filter[0].phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 							else if (!isEmail(filter[0].email)) throw new Error("البريد الالكتروني غير صحيح");
 						}
 					} else {
-						if (!isBefore(birthDate, new Date().toString())) throw new Error("تاريخ الميلاد غير صحيح");
+						if (!isBefore(birthDate, moment().format("yyyy-MM-DD")))
+							throw new Error("تاريخ الميلاد غير صحيح");
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
 					}
