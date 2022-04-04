@@ -98,7 +98,6 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						} else {
 							if (!isBefore(filter[0].birthDate, moment().format("yyyy-MM-DD")))
 								throw new Error("تاريخ الميلاد غير صحيح");
-							else if (!isEmail(filter[0].email)) throw new Error("البريد الالكتروني غير صحيح");
 						}
 					} else {
 						if (!isBefore(birthDate, moment().format("yyyy-MM-DD")))

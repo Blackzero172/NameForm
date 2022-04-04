@@ -29,7 +29,6 @@ const ChildCard = ({ child, onChange }) => {
 				</div>
 				<div className="lower-section flex-content flex-reverse">
 					<CustomInput
-						required
 						label="البريد الالكتروني"
 						value={email}
 						onChange={(e) => {
