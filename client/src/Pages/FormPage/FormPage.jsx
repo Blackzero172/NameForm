@@ -90,11 +90,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						isEmail(email)
 					) {
 						const filter = children.filter((child) => {
-							return (
-								!isBefore(child.birthDate, moment().format("yyyy-MM-DD")) ||
-								!isMobilePhone(child.phoneNumber, "he-IL") ||
-								!isEmail(child.email)
-							);
+							return !isBefore(child.birthDate, moment().format("yyyy-MM-DD")) || !isEmail(child.email);
 						});
 						if (filter.length < 1) {
 							const response = await updatePerson();
@@ -102,7 +98,6 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						} else {
 							if (!isBefore(filter[0].birthDate, moment().format("yyyy-MM-DD")))
 								throw new Error("تاريخ الميلاد غير صحيح");
-							else if (!isMobilePhone(filter[0].phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 							else if (!isEmail(filter[0].email)) throw new Error("البريد الالكتروني غير صحيح");
 						}
 					} else {

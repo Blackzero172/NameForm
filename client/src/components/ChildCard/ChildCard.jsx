@@ -17,7 +17,6 @@ const ChildCard = ({ child, onChange }) => {
 						}}
 					/>
 					<CustomInput
-						required
 						type="number"
 						label="رقم الهاتف"
 						minlength="10"
