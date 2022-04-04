@@ -6,7 +6,7 @@ const PersonCard = ({ person }) => {
 			<div className="upper-section flex flex-evenly">
 				<p>الاسم : {person.name}</p>
 				{person.phoneNumber && <p>رقم الهاتف : {person.phoneNumber}</p>}
-				{person.parentName && !person.phoneNumber && <p>اسم الوالد/ة : </p>}
+				{person.parentName && !person.phoneNumber && <p>اسم الوالد/ة :{person.parentName} </p>}
 			</div>
 			<div className="lower-section flex flex-evenly">
 				<p>العمر : {Number(person.age).toFixed(1)}</p>
