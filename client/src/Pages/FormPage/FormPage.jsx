@@ -90,7 +90,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						isEmail(email)
 					) {
 						const filter = children.filter((child) => {
-							return !isBefore(child.birthDate, moment().format("yyyy-MM-DD")) || !isEmail(child.email);
+							return !isBefore(child.birthDate, moment().format("yyyy-MM-DD"));
 						});
 						if (filter.length < 1) {
 							const response = await updatePerson();
@@ -160,6 +160,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 												phoneNumber: "",
 												birthDate: "",
 												_id: new mongoose.Types.ObjectId(),
+												parentName: name,
 											});
 										}
 										setUser({

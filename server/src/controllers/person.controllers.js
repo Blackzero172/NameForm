@@ -98,6 +98,7 @@ const editPerson = async (req, res) => {
 		}
 		res.send(person);
 	} catch (e) {
+		console.log(e);
 		if (e.message.includes("E11000")) return res.status(400).send("User already Exists!");
 		res.status(500).send(e.message);
 	}

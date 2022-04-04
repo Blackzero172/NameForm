@@ -7,8 +7,6 @@ const childSchema = mongoose.Schema({
 	},
 	email: {
 		type: String,
-		required: true,
-		unique: true,
 		lowercase: true,
 		trim: true,
 		validate(val) {
@@ -23,6 +21,10 @@ const childSchema = mongoose.Schema({
 	},
 	birthDate: {
 		type: Date,
+		required: true,
+	},
+	parentName: {
+		type: String,
 		required: true,
 	},
 	age: {
