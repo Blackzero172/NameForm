@@ -1,0 +1,4 @@
+div.input-container.flex-both input[type="radio"] {
+	width: 15px;
+	margin: 0 1rem;
+}

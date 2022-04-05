@@ -1,6 +1,6 @@
 const Person = require("../models/person");
 const validator = require("validator");
-const Child = require("../models/child");
+const mongoose = require("mongoose");
 const moment = require("moment");
 const getPerson = async (req, res) => {
 	try {
@@ -10,7 +10,9 @@ const getPerson = async (req, res) => {
 		const person = await Person.findOne({
 			email: email.toLowerCase(),
 			phoneNumber: phoneNumber,
-		}).populate("children");
+		})
+			.populate("children")
+			.populate("spouse");
 		if (!person)
 			return res.send({
 				name: "",
@@ -18,6 +20,8 @@ const getPerson = async (req, res) => {
 				phoneNumber,
 				children: [],
 				birthDate: new Date(),
+				gender: "",
+				spouse: { _id: new mongoose.Types.ObjectId() },
 				age: 0,
 			});
 		res.send(person);
@@ -27,45 +31,31 @@ const getPerson = async (req, res) => {
 };
 const getAllPeople = async (req, res) => {
 	let people = [];
-	let children = [];
-	people = await Person.find({}).populate("children");
+	people = await Person.find({});
 	await Promise.all(
 		people.map((person) => {
 			person.age = moment().diff(person.birthDate, "years", true);
 			person.save();
 		})
 	);
-	children = await Child.find({});
-	await Promise.all(
-		children.map((child) => {
-			child.age = moment().diff(child.birthDate, "years", true);
-			child.save();
-		})
-	);
-
-	children = children.filter(
-		(child) =>
-			!people.find(
-				(person) =>
-					person.email === child.email &&
-					person.phoneNumber === child.phoneNumber &&
-					person.birthDate === child.birthDate
-			)
-	);
 	if (people.length < 1) return res.status(404).send("No Data Found");
 	res.send([...people, ...children]);
 };
 const editPerson = async (req, res) => {
 	try {
-		const { email, name, phoneNumber, children, birthDate } = req.body;
+		const { email, name, phoneNumber, children, birthDate, spouse, gender } = req.body;
 		let person = await Person.findOne({ email: email });
 		if (!person) {
 			person = new Person({
 				name,
 				email,
 				phoneNumber,
-				children,
+				children: children.map((child) => {
+					return child._id;
+				}),
+				gender,
 				birthDate,
+				spouse: spouse._id,
 				age: moment().diff(birthDate, "years", true),
 			});
 			await person.save();
@@ -73,29 +63,41 @@ const editPerson = async (req, res) => {
 			person.email = email;
 			person.birthDate = birthDate;
 			person.name = name;
+			person.gender = gender;
 			person.phoneNumber = phoneNumber;
+			person.children = children.map((child) => {
+				return child._id;
+			});
+			person.spouse = spouse._id;
+			person.age = moment().diff(birthDate, "years", true);
 			await person.save();
 		}
-		try {
-			children.forEach(async (child) => {
-				child.age = moment().diff(child.birthDate, "years", true);
-				let newChild = await Child.findById(child._id);
-				if (!newChild) newChild = new Child(child);
-				else {
-					newChild.name = child.name;
-					newChild.birthDate = child.birthDate;
-					newChild.phoneNumber = child.phoneNumber;
-					newChild.age = child.age;
-				}
-				await newChild.save();
-			});
-			(person.age = moment().diff(birthDate, "years", true)),
-				(person.children = children.map((child) => {
-					return child._id;
-				}));
-		} catch (e) {
-			console.log(e);
+		spouse.age = moment().diff(spouse.birthDate, "years", true);
+		spouse.spouse = person._id;
+		let spouseObject = await Person.findById(spouse._id);
+		if (!spouseObject) {
+			spouseObject = new Person(spouse);
+			await spouseObject.save();
+		} else {
+			spouseObject.email = spouse.email;
+			spouseObject.birthDate = spouse.birthDate;
+			spouseObject.name = spouse.name;
+			spouseObject.gender = spouse.gender;
+			spouseObject.phoneNumber = spouse.phoneNumber;
+			await spouseObject.save();
 		}
+		children.forEach(async (child) => {
+			child.age = moment().diff(child.birthDate, "years", true);
+			let newChild = await Person.findById(child._id);
+			if (!newChild) newChild = new Person(child);
+			else {
+				newChild.name = child.name;
+				newChild.birthDate = child.birthDate;
+				newChild.phoneNumber = child.phoneNumber;
+				newChild.age = child.age;
+			}
+			await newChild.save();
+		});
 		res.send(person);
 	} catch (e) {
 		console.log(e);

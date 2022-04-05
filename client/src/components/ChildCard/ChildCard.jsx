@@ -1,5 +1,6 @@
 import { onNumberInputChange } from "../../utils/utils";
 import CustomInput from "../CustomInput/CustomInput.components";
+import CustomRadio from "../CustomRadio/CustomRadio";
 
 import "./ChildCard.css";
 const ChildCard = ({ child, onChange }) => {
@@ -7,7 +8,7 @@ const ChildCard = ({ child, onChange }) => {
 	return (
 		<div className="child-card flex-both">
 			<div className="window flex-column">
-				<div className="upper-section flex flex-reverse">
+				<div className="form-grid">
 					<CustomInput
 						required
 						label="الاسم"
@@ -26,8 +27,7 @@ const ChildCard = ({ child, onChange }) => {
 							onChange(child, "phoneNumber", e.target.value, e);
 						}}
 					/>
-				</div>
-				<div className="lower-section flex-content flex-reverse">
+
 					<CustomInput
 						label="البريد الالكتروني"
 						value={email}
@@ -44,6 +44,13 @@ const ChildCard = ({ child, onChange }) => {
 							onChange(child, "birthDate", e.target.value.toString());
 						}}
 					/>
+					<div className="select flex-both flex-column">
+						<label>الجنس</label>
+						<div className="gender-select">
+							<CustomRadio name="gender-select" label="ذكر" />
+							<CustomRadio name="gender-select" label="انثى" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

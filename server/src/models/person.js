@@ -7,16 +7,14 @@ const personSchema = mongoose.Schema({
 	},
 	email: {
 		type: String,
-		required: true,
-		unique: true,
 		lowercase: true,
+		trim: true,
 		validate(val) {
 			if (!validator.isEmail(val)) throw new Error("Invalid Email");
 		},
 	},
 	phoneNumber: {
 		type: String,
-		required: true,
 		validate(val) {
 			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
 		},
@@ -29,7 +27,15 @@ const personSchema = mongoose.Schema({
 		type: Number,
 		required: true,
 	},
-	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Child" }],
+	gender: {
+		type: String,
+		required: true,
+	},
+	parentName: {
+		type: String,
+	},
+	spouse: { type: mongoose.Schema.Types.ObjectId, ref: "Person" },
+	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Person" }],
 });
 
 const Person = mongoose.model("Person", personSchema);

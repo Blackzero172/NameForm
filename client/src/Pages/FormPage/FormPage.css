@@ -3,14 +3,16 @@
 	padding: 1rem 0;
 	flex-wrap: wrap;
 }
-.form-page .input-container input {
-	width: 80%;
+
+.form-page .form-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(160px, 1fr));
+	width: 100%;
+	justify-items: center;
+	direction: rtl;
 }
-.form-page .input-container {
-	width: 50%;
-}
-.form-page input[type="Date"] {
-	text-indent: 0.4rem;
+input {
+	text-align: center;
 }
 button:hover:not(:disabled) {
 	border-color: var(--main-color);
@@ -20,11 +22,16 @@ button:disabled {
 	border-color: darkgray;
 }
 .window {
+	margin-top: 0.2rem;
 	width: 30%;
 }
 .child-card {
 	width: 100%;
 }
+.form-page .select {
+	flex: 1;
+}
+
 @media screen and (max-width: 768px) {
 	.window {
 		width: 90%;

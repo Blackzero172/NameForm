@@ -40,12 +40,14 @@ function App() {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const data = await api.post(`/people/`, credentials);
-			data.data.birthDate = moment(data.data.birthDate).format("yyyy-MM-DD");
-			data.data.children.forEach((child) => {
+			const person = await api.post(`/people/`, credentials);
+			person.data.birthDate = moment(person.data.birthDate).format("yyyy-MM-DD");
+			person.data.children.forEach((child) => {
 				child.birthDate = moment(child.birthDate).format("yyyy-MM-DD");
 			});
-			setUser(data.data);
+			if (person.data.spouse)
+				person.data.spouse.birthDate = moment(person.data.spouse.birthDate).format("yyyy-MM-DD");
+			setUser(person.data);
 		} catch (e) {
 			throw new Error(e.response.data);
 		} finally {

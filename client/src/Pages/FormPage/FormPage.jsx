@@ -1,16 +1,18 @@
 import { debounce } from "debounce";
 import moment from "moment";
 import mongoose from "mongoose";
-import { useRef, useState } from "react";
+import Select from "react-select";
+import { useEffect, useRef, useState } from "react";
 import { isBefore, isMobilePhone, isEmail } from "validator";
 import ChildCard from "../../components/ChildCard/ChildCard";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
 
 import "./FormPage.css";
+import CustomRadio from "../../components/CustomRadio/CustomRadio";
 const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, updatePerson }) => {
 	const { email, phoneNumber, secretKey } = credentials;
-	const { name, children, birthDate } = person;
+	const { name, children, birthDate, spouse, gender } = person;
 	const remoteEmail = person.email;
 	const remotePhoneNumber = person.phoneNumber;
 	const errorMessageRef = useRef();
@@ -38,7 +40,10 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 			handleErrorMessage(e);
 		}
 	};
-
+	let requiredCondition = false;
+	if (person.name)
+		if (spouse.name)
+			requiredCondition = spouse.name || spouse.phoneNumber || spouse.email || spouse.birthDate;
 	const changeChildInfo = (child, prop, value) => {
 		const childrenCopy = [...children];
 		const childCopy = childrenCopy[childrenCopy.indexOf(child)];
@@ -113,7 +118,8 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 			{!personCopy.name ? (
 				<>
 					<div className="window flex-both flex-column">
-						<div className="upper-section flex-both">
+						<h2>التفاصيل الشخصية</h2>
+						<div className="form-grid flex-both">
 							<CustomInput
 								required
 								label="الاسم"
@@ -124,6 +130,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 							/>
 							<CustomInput
 								required
+								type="number"
 								label="رقم الهاتف"
 								minlength="10"
 								value={remotePhoneNumber}
@@ -131,8 +138,6 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 									setUser({ ...person, phoneNumber: e.target.value });
 								}}
 							/>
-						</div>
-						<div className="lower-section flex-both">
 							<CustomInput
 								required
 								label="البريد الالكتروني"
@@ -170,16 +175,76 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 									}
 								}}
 							/>
+							<CustomInput
+								required
+								label="تاريخ الميلاد"
+								value={birthDate}
+								type="Date"
+								onChange={(e) => {
+									setUser({ ...person, birthDate: e.target.value });
+								}}
+							/>
+							<div className="select flex-both flex-column">
+								<label>الجنس</label>
+								<div className="gender-select">
+									<CustomRadio
+										name="gender-select"
+										label="ذكر"
+										value={gender === "male"}
+										onChange={() => {
+											setUser({ ...person, gender: "male", spouse: { ...spouse, gender: "female" } });
+										}}
+									/>
+									<CustomRadio
+										name="gender-select"
+										label="انثى"
+										value={gender === "female"}
+										onChange={() => {
+											setUser({ ...person, gender: "female", spouse: { ...spouse, gender: "male" } });
+										}}
+									/>
+								</div>
+							</div>
 						</div>
-						<CustomInput
-							required
-							label="تاريخ الميلاد"
-							value={birthDate}
-							type="Date"
-							onChange={(e) => {
-								setUser({ ...person, birthDate: e.target.value });
-							}}
-						/>
+					</div>
+					<div className="window flex-both flex-column">
+						<h2>التفاصيل الزوج/ة</h2>
+						<div className="form-grid flex-both">
+							<CustomInput
+								required={requiredCondition}
+								label="الاسم"
+								value={spouse.name}
+								onChange={(e) => {
+									setUser({ ...person, spouse: { ...spouse, name: e.target.value } });
+								}}
+							/>
+							<CustomInput
+								required={requiredCondition}
+								label="رقم الهاتف"
+								minlength="10"
+								value={spouse.phoneNumber}
+								onChange={(e) => {
+									setUser({ ...person, spouse: { ...spouse, phoneNumber: e.target.value } });
+								}}
+							/>
+							<CustomInput
+								required={requiredCondition}
+								label="البريد الالكتروني"
+								value={spouse.email}
+								onChange={(e) => {
+									setUser({ ...person, spouse: { ...spouse, email: e.target.value } });
+								}}
+							/>
+							<CustomInput
+								required={requiredCondition}
+								label="تاريخ الميلاد"
+								value={spouse.birthDate}
+								type="Date"
+								onChange={(e) => {
+									setUser({ ...person, spouse: { ...spouse, birthDate: e.target.value } });
+								}}
+							/>
+						</div>
 					</div>
 
 					{children.map((child) => {
