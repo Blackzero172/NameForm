@@ -4,7 +4,7 @@ import CustomRadio from "../CustomRadio/CustomRadio";
 
 import "./ChildCard.css";
 const ChildCard = ({ child, onChange }) => {
-	const { name, phoneNumber, birthDate, email } = child;
+	const { name, phoneNumber, birthDate, email, gender } = child;
 	return (
 		<div className="child-card flex-both">
 			<div className="window flex-column">
@@ -47,8 +47,22 @@ const ChildCard = ({ child, onChange }) => {
 					<div className="select flex-both flex-column">
 						<label>الجنس</label>
 						<div className="gender-select">
-							<CustomRadio name="gender-select" label="ذكر" />
-							<CustomRadio name="gender-select" label="انثى" />
+							<CustomRadio
+								name="gender-select"
+								label="ذكر"
+								value={gender === "male"}
+								onChange={() => {
+									onChange(child, "gender", "male");
+								}}
+							/>
+							<CustomRadio
+								name="gender-select"
+								label="انثى"
+								value={gender === "female"}
+								onChange={() => {
+									onChange(child, "gender", "female");
+								}}
+							/>
 						</div>
 					</div>
 				</div>

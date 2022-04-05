@@ -9,14 +9,17 @@ const personSchema = mongoose.Schema({
 		type: String,
 		lowercase: true,
 		trim: true,
+		unique: true,
+		sparse: true,
+		partialFilterExpression: { email: { $type: "string" } },
 		validate(val) {
-			if (!validator.isEmail(val)) throw new Error("Invalid Email");
+			if (!validator.isEmail(val) && val !== "") throw new Error("Invalid Email");
 		},
 	},
 	phoneNumber: {
 		type: String,
 		validate(val) {
-			if (!validator.isMobilePhone(val, "he-IL")) throw new Error("Invalid Phone Number");
+			if (!validator.isMobilePhone(val, "he-IL") && val !== "") throw new Error("Invalid Phone Number");
 		},
 	},
 	birthDate: {

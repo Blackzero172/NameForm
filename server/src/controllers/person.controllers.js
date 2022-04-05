@@ -31,15 +31,20 @@ const getPerson = async (req, res) => {
 };
 const getAllPeople = async (req, res) => {
 	let people = [];
-	people = await Person.find({});
+	people = await Person.find({}).populate("spouse");
 	await Promise.all(
 		people.map((person) => {
 			person.age = moment().diff(person.birthDate, "years", true);
 			person.save();
 		})
 	);
+	const peopleCopy = people.map((person) => {
+		return { ...person, "_doc.name": person.name.split(" ")[0] };
+	});
+	console.log(arrayUnion(peopleCopy));
+
 	if (people.length < 1) return res.status(404).send("No Data Found");
-	res.send([...people, ...children]);
+	res.send([...people]);
 };
 const editPerson = async (req, res) => {
 	try {
@@ -55,9 +60,9 @@ const editPerson = async (req, res) => {
 				}),
 				gender,
 				birthDate,
-				spouse: spouse._id,
 				age: moment().diff(birthDate, "years", true),
 			});
+			if (spouse) person.spouse = spouse._id;
 			await person.save();
 		} else {
 			person.email = email;
@@ -68,23 +73,29 @@ const editPerson = async (req, res) => {
 			person.children = children.map((child) => {
 				return child._id;
 			});
+			if (spouse) person.spouse = spouse._id;
 			person.spouse = spouse._id;
 			person.age = moment().diff(birthDate, "years", true);
 			await person.save();
 		}
-		spouse.age = moment().diff(spouse.birthDate, "years", true);
-		spouse.spouse = person._id;
-		let spouseObject = await Person.findById(spouse._id);
-		if (!spouseObject) {
-			spouseObject = new Person(spouse);
-			await spouseObject.save();
-		} else {
-			spouseObject.email = spouse.email;
-			spouseObject.birthDate = spouse.birthDate;
-			spouseObject.name = spouse.name;
-			spouseObject.gender = spouse.gender;
-			spouseObject.phoneNumber = spouse.phoneNumber;
-			await spouseObject.save();
+		if (spouse) {
+			spouse.age = moment().diff(spouse.birthDate, "years", true);
+			spouse.spouse = person._id;
+			let spouseObject = await Person.findById(spouse._id);
+			if (!spouseObject) {
+				spouseObject = new Person(spouse);
+				await spouseObject.save();
+			} else {
+				spouseObject.email = spouse.email;
+				spouseObject.birthDate = spouse.birthDate;
+				spouseObject.name = spouse.name;
+				spouseObject.gender = spouse.gender;
+				spouseObject.phoneNumber = spouse.phoneNumber;
+				person.children = children.map((child) => {
+					return child._id;
+				});
+				await spouseObject.save();
+			}
 		}
 		children.forEach(async (child) => {
 			child.age = moment().diff(child.birthDate, "years", true);

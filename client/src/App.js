@@ -57,6 +57,7 @@ function App() {
 	const updatePerson = async () => {
 		setLoading(true);
 		try {
+			if (!loggedInUser.spouse.hasOwnProperty("name")) delete loggedInUser.spouse;
 			const response = await api.put("/people", loggedInUser);
 			return response.data;
 		} catch (e) {

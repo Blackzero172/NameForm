@@ -41,9 +41,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		}
 	};
 	let requiredCondition = false;
-	if (person.name)
-		if (spouse.name)
-			requiredCondition = spouse.name || spouse.phoneNumber || spouse.email || spouse.birthDate;
+	if (person.name) if (spouse.name) requiredCondition = spouse.name || spouse.phoneNumber || spouse.email;
 	const changeChildInfo = (child, prop, value) => {
 		const childrenCopy = [...children];
 		const childCopy = childrenCopy[childrenCopy.indexOf(child)];
@@ -88,27 +86,34 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 			className="form-page flex-both flex-column"
 			onSubmit={async (e) => {
 				e.preventDefault();
+				const arRegex = /^[\u0621-\u064A\040]+$/;
 				try {
 					if (
+						arRegex.test(name) &&
 						isBefore(birthDate, moment().format("yyyy-MM-DD")) &&
 						isMobilePhone(phoneNumber, "he-IL") &&
 						isEmail(email)
 					) {
-						const filter = children.filter((child) => {
-							return !isBefore(child.birthDate, moment().format("yyyy-MM-DD"));
-						});
+						const filter = children.filter(
+							(child) =>
+								!isBefore(child.birthDate, moment().format("yyyy-MM-DD")) && !arRegex.test(child.name)
+						);
 						if (filter.length < 1) {
 							const response = await updatePerson();
 							setCopy(response);
 						} else {
-							if (!isBefore(filter[0].birthDate, moment().format("yyyy-MM-DD")))
-								throw new Error("تاريخ الميلاد غير صحيح");
+							children.forEach((child) => {
+								if (!isBefore(child.birthDate, moment().format("yyyy-MM-DD")))
+									throw new Error("تاريخ الميلاد غير صحيح");
+								else if (!arRegex.test(child.name)) throw new Error("الاسم مسموح فقط في العربية");
+							});
 						}
 					} else {
 						if (!isBefore(birthDate, moment().format("yyyy-MM-DD")))
 							throw new Error("تاريخ الميلاد غير صحيح");
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
+						else if (!arRegex.test(name)) throw new Error("الاسم مسموح فقط في العربية");
 					}
 				} catch (e) {
 					handleErrorMessage(e);
