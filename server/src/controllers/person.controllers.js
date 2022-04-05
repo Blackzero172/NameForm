@@ -6,7 +6,8 @@ const getPerson = async (req, res) => {
 	try {
 		const { email, phoneNumber } = req.body;
 		if (!validator.isEmail(email)) return res.status(400).send("Invalid Email");
-		if (!validator.isMobilePhone(phoneNumber, "he-IL")) return res.status(400).send("Invalid Phone Number");
+		if (!validator.isMobilePhone(phoneNumber, "he-IL"))
+			return res.status(400).send("Invalid Phone Number");
 		const person = await Person.findOne({
 			email: email.toLowerCase(),
 			phoneNumber: phoneNumber,
@@ -38,17 +39,29 @@ const getAllPeople = async (req, res) => {
 			person.save();
 		})
 	);
-	const peopleCopy = people.map((person) => {
-		return { ...person, "_doc.name": person.name.split(" ")[0] };
-	});
-	console.log(arrayUnion(peopleCopy));
 
+	let peopleCopy = [...people];
+	people.forEach((person) => {
+		for (let i = 0; i < people.length; i++) {
+			if (
+				person.name.split(" ")[0] === people[i].name.split(" ")[0] &&
+				moment(person.birthDate).diff(people[i].birthDate, "years") === 0 &&
+				person._id !== people[i]._id
+			) {
+				if (person.parentName) delete peopleCopy[peopleCopy.indexOf(people[i])];
+				else delete peopleCopy[peopleCopy.indexOf(person)];
+				break;
+			}
+		}
+	});
+	peopleCopy = peopleCopy.filter((person) => person);
 	if (people.length < 1) return res.status(404).send("No Data Found");
-	res.send([...people]);
+	res.send([...peopleCopy]);
 };
 const editPerson = async (req, res) => {
 	try {
-		const { email, name, phoneNumber, children, birthDate, spouse, gender } = req.body;
+		const { email, name, phoneNumber, children, birthDate, spouse, gender } =
+			req.body;
 		let person = await Person.findOne({ email: email });
 		if (!person) {
 			person = new Person({
@@ -81,6 +94,9 @@ const editPerson = async (req, res) => {
 		if (spouse) {
 			spouse.age = moment().diff(spouse.birthDate, "years", true);
 			spouse.spouse = person._id;
+			spouseObject.children = children.map((child) => {
+				return child._id;
+			});
 			let spouseObject = await Person.findById(spouse._id);
 			if (!spouseObject) {
 				spouseObject = new Person(spouse);
@@ -91,9 +107,7 @@ const editPerson = async (req, res) => {
 				spouseObject.name = spouse.name;
 				spouseObject.gender = spouse.gender;
 				spouseObject.phoneNumber = spouse.phoneNumber;
-				person.children = children.map((child) => {
-					return child._id;
-				});
+
 				await spouseObject.save();
 			}
 		}
@@ -112,7 +126,8 @@ const editPerson = async (req, res) => {
 		res.send(person);
 	} catch (e) {
 		console.log(e);
-		if (e.message.includes("E11000")) return res.status(400).send("User already Exists!");
+		if (e.message.includes("E11000"))
+			return res.status(400).send("User already Exists!");
 		res.status(500).send(e.message);
 	}
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../api/api";
-import Select from "react-select";
+import Select from "react-select/base/dist/react-select.cjs";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
 
 import "./Dashboard.css";
@@ -28,12 +28,17 @@ const Dashboard = () => {
 	useEffect(() => {
 		setFilteredData(
 			data.filter((person) => {
-				const searchCondition = person.name.toLowerCase().includes(searchWord.toLowerCase());
-				if (ageFilter === ">" && ageNumber > 0 && searchCondition) return person.age > ageNumber;
-				else if (ageFilter === "<" && ageNumber > 0 && searchCondition) return person.age < ageNumber;
+				const searchCondition = person.name
+					.toLowerCase()
+					.includes(searchWord.toLowerCase());
+				if (ageFilter === ">" && ageNumber > 0 && searchCondition)
+					return person.age > ageNumber;
+				else if (ageFilter === "<" && ageNumber > 0 && searchCondition)
+					return person.age < ageNumber;
 				else if (searchCondition) {
 					return true;
-				} else if ((ageFilter === "" || ageNumber === 0) && searchCondition) return true;
+				} else if ((ageFilter === "" || ageNumber === 0) && searchCondition)
+					return true;
 				else return false;
 			})
 		);
