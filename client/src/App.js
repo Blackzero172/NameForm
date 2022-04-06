@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useRef, useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import mongoose from "mongoose";
 import Spinner from "./components/Spinner/Spinner";
 import api from "./api/api";
 import LoginPage from "./Pages/LoginPage/LoginPage";
@@ -40,14 +41,19 @@ function App() {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const person = await api.post(`/people/`, credentials);
-			person.data.birthDate = moment(person.data.birthDate).format("yyyy-MM-DD");
-			person.data.children.forEach((child) => {
+			const data = await api.post(`/people/`, credentials);
+			const person = data.data;
+			person.birthDate = moment(person.birthDate).format("yyyy-MM-DD");
+			person.children.forEach((child) => {
 				child.birthDate = moment(child.birthDate).format("yyyy-MM-DD");
 			});
-			if (person.data.spouse)
-				person.data.spouse.birthDate = moment(person.data.spouse.birthDate).format("yyyy-MM-DD");
-			setUser(person.data);
+			if (person.spouse) person.spouse.birthDate = moment(person.spouse.birthDate).format("yyyy-MM-DD");
+			else
+				person.spouse = {
+					_id: new mongoose.Types.ObjectId(),
+					gender: person.gender === "male" ? "female" : "male",
+				};
+			setUser(person);
 		} catch (e) {
 			throw new Error(e.response.data);
 		} finally {

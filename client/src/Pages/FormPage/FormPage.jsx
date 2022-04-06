@@ -41,7 +41,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 		}
 	};
 	let requiredCondition = false;
-	if (person.name) if (spouse.name) requiredCondition = spouse.name || spouse.phoneNumber || spouse.email;
+	if (person.name) if (spouse) requiredCondition = spouse.name || spouse.phoneNumber || spouse.email;
 	const changeChildInfo = (child, prop, value) => {
 		const childrenCopy = [...children];
 		const childCopy = childrenCopy[childrenCopy.indexOf(child)];
@@ -90,26 +90,26 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 				try {
 					if (
 						arRegex.test(name) &&
-						isBefore(birthDate, moment().format("yyyy-MM-DD")) &&
+						isBefore(birthDate, moment().format("yyyy-DD-MM")) &&
 						isMobilePhone(phoneNumber, "he-IL") &&
 						isEmail(email)
 					) {
 						const filter = children.filter(
 							(child) =>
-								!isBefore(child.birthDate, moment().format("yyyy-MM-DD")) && !arRegex.test(child.name)
+								!isBefore(child.birthDate, moment().format("yyyy-DD-MM")) && !arRegex.test(child.name)
 						);
 						if (filter.length < 1) {
 							const response = await updatePerson();
 							setCopy(response);
 						} else {
 							children.forEach((child) => {
-								if (!isBefore(child.birthDate, moment().format("yyyy-MM-DD")))
+								if (!isBefore(child.birthDate, moment().format("yyyy-DD-MM")))
 									throw new Error("تاريخ الميلاد غير صحيح");
 								else if (!arRegex.test(child.name)) throw new Error("الاسم مسموح فقط في العربية");
 							});
 						}
 					} else {
-						if (!isBefore(birthDate, moment().format("yyyy-MM-DD")))
+						if (!isBefore(birthDate, moment().format("yyyy-DD-MM")))
 							throw new Error("تاريخ الميلاد غير صحيح");
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");

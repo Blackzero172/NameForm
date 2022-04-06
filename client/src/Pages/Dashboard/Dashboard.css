@@ -3,7 +3,6 @@
 }
 .dashboard .input-container {
 	align-items: flex-end;
-	padding-left: 2rem;
 }
 .dashboard .input-container label {
 	padding-right: 1rem;
@@ -20,19 +19,28 @@
 	width: 100%;
 	background-color: var(--main-color);
 	color: var(--secondary-color);
+	/* padding: 0 1rem; */
 }
 .dashboard .age-btns {
 	width: 100%;
-	padding: 0 0 1rem;
 }
-.dashboard .age-btns .right-section > div:not(.input-container) {
+.dashboard .age-btns .select-container {
 	bottom: 0.6rem;
-	text-indent: 0.5rem;
 	color: black;
 	padding-left: 1rem;
 }
 .dashboard .age-btns .input-container {
 	width: 30%;
+}
+.dashboard .right-section {
+	direction: rtl;
+	padding-right: 1rem;
+}
+.dashboard .right-section .input-container {
+	padding-right: 1rem;
+}
+.dashboard .right-section .input-container label {
+	margin-left: auto;
 }
 .dashboard .data-grid,
 .dashboard > .lower-section {
@@ -44,12 +52,34 @@
 	gap: 0.25rem;
 	padding: 0 0.2rem;
 }
+.dashboard .age-btns .right-section > .gender-select {
+	color: var(--secondary-color);
+}
+.dashboard .gender-select .select-container {
+	padding-top: 1.75rem;
+	color: black;
+}
+.dashboard .gender-select .input-container {
+	padding: 0;
+	width: 100%;
+}
 .dashboard > .lower-section {
 	margin-top: 1rem;
 }
 @media screen and (max-width: 528px) {
 	.dashboard .age-btns {
 		flex-direction: column;
+	}
+	.dashboard .right-section {
+		display: grid;
+		grid-template-columns: repeat(2, auto);
+		direction: rtl;
+	}
+	.dashboard .right-section .input-container {
+		width: 100%;
+	}
+	.dashboard .right-section .input-container label {
+		margin-left: auto;
 	}
 	.dashboard .left-section {
 		padding-right: 1rem;

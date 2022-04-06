@@ -28,7 +28,7 @@ button:disabled {
 .child-card {
 	width: 100%;
 }
-.form-page .select {
+.select {
 	flex: 1;
 }
 
