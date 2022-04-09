@@ -10,7 +10,7 @@ const PersonCard = ({ person }) => {
 			<p>تاريخ الميلاد : {moment(person.birthDate).format("DD/MM/YYYY")}</p>
 			{person.parentName && person.phoneNumber && <p>اسم الوالد/ة :{person.parentName} </p>}
 			{person.spouse && <p>اسم الزوج/ة : {person.spouse.name}</p>}
-			<p>الجنس : {person.gender === "male" ? "ذكر" : "انثى"}</p>
+			<p>النوع : {person.gender === "male" ? "ذكر" : "انثى"}</p>
 		</div>
 	);
 };

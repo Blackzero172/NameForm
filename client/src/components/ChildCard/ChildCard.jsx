@@ -45,7 +45,7 @@ const ChildCard = ({ child, onChange }) => {
 						}}
 					/>
 					<div className="select flex-both flex-column">
-						<label>الجنس</label>
+						<label>النوع</label>
 						<div className="gender-select">
 							<CustomRadio
 								name="gender-select"

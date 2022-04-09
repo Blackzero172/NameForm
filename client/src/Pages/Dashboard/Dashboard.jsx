@@ -99,10 +99,10 @@ const Dashboard = () => {
 							</div>
 						</div>
 						<div className="select flex-both flex-column">
-							<label>الجنس</label>
+							<label>النوع</label>
 							<div className="gender-select">
 								<Select
-									placeholder="اختر الجنس"
+									placeholder="اختر النوع"
 									options={[
 										{ label: "ذكر", value: "male" },
 										{ label: "انثى", value: "female" },
