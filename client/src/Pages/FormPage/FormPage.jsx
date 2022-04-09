@@ -1,8 +1,7 @@
 import { debounce } from "debounce";
 import moment from "moment";
 import mongoose from "mongoose";
-import Select from "react-select";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { isBefore, isMobilePhone, isEmail } from "validator";
 import ChildCard from "../../components/ChildCard/ChildCard";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
@@ -252,8 +251,8 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						</div>
 					</div>
 
-					{children.map((child) => {
-						return <ChildCard child={child} onChange={changeChildInfo} key={child._id} />;
+					{children.map((child, index) => {
+						return <ChildCard child={child} onChange={changeChildInfo} key={child._id} index={index} />;
 					})}
 					<p className="error-message red" ref={errorMessageRef}></p>
 					<CustomButton text="ارسال" type="submit" />

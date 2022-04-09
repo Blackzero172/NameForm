@@ -3,7 +3,7 @@ import CustomInput from "../CustomInput/CustomInput.components";
 import CustomRadio from "../CustomRadio/CustomRadio";
 
 import "./ChildCard.css";
-const ChildCard = ({ child, onChange }) => {
+const ChildCard = ({ child, onChange, index }) => {
 	const { name, phoneNumber, birthDate, email, gender } = child;
 	return (
 		<div className="child-card flex-both">
@@ -48,7 +48,7 @@ const ChildCard = ({ child, onChange }) => {
 						<label>النوع</label>
 						<div className="gender-select">
 							<CustomRadio
-								name="gender-select"
+								name={`gender-select-${index}`}
 								label="ذكر"
 								value={gender === "male"}
 								onChange={() => {
@@ -56,7 +56,7 @@ const ChildCard = ({ child, onChange }) => {
 								}}
 							/>
 							<CustomRadio
-								name="gender-select"
+								name={`gender-select-${index}`}
 								label="انثى"
 								value={gender === "female"}
 								onChange={() => {
