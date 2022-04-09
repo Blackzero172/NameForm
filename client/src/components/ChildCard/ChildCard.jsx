@@ -45,9 +45,12 @@ const ChildCard = ({ child, onChange, index }) => {
 						}}
 					/>
 					<div className="select flex-both flex-column">
-						<label>النوع</label>
+						<label>
+							النوع <span className="red">*</span>
+						</label>
 						<div className="gender-select">
 							<CustomRadio
+								required
 								name={`gender-select-${index}`}
 								label="ذكر"
 								value={gender === "male"}
@@ -56,6 +59,7 @@ const ChildCard = ({ child, onChange, index }) => {
 								}}
 							/>
 							<CustomRadio
+								required
 								name={`gender-select-${index}`}
 								label="انثى"
 								value={gender === "female"}

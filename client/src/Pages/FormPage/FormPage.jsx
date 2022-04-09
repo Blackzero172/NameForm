@@ -2,7 +2,7 @@ import { debounce } from "debounce";
 import moment from "moment";
 import mongoose from "mongoose";
 import { useRef, useState } from "react";
-import { isBefore, isMobilePhone, isEmail } from "validator";
+import { isMobilePhone, isEmail } from "validator";
 import ChildCard from "../../components/ChildCard/ChildCard";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
@@ -33,6 +33,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 	};
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+
 		try {
 			await getPerson();
 		} catch (e) {
@@ -89,26 +90,27 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 				try {
 					if (
 						arRegex.test(name) &&
-						isBefore(birthDate, moment().format("yyyy-DD-MM")) &&
+						moment().format("yyyy-MM-DD") !== moment(birthDate).format("yyyy-MM-DD") &&
 						isMobilePhone(phoneNumber, "he-IL") &&
 						isEmail(email)
 					) {
 						const filter = children.filter(
 							(child) =>
-								!isBefore(child.birthDate, moment().format("yyyy-DD-MM")) && !arRegex.test(child.name)
+								moment().format("yyyy-MM-DD") === moment(child.birthDate).format("yyyy-MM-DD") &&
+								!arRegex.test(child.name)
 						);
 						if (filter.length < 1) {
 							const response = await updatePerson();
 							setCopy(response);
 						} else {
 							children.forEach((child) => {
-								if (!isBefore(child.birthDate, moment().format("yyyy-DD-MM")))
+								if (moment().format("yyyy-MM-DD") === moment(child.birthDate).format("yyyy-MM-DD"))
 									throw new Error("تاريخ الميلاد غير صحيح");
 								else if (!arRegex.test(child.name)) throw new Error("الاسم مسموح فقط في العربية");
 							});
 						}
 					} else {
-						if (!isBefore(birthDate, moment().format("yyyy-DD-MM")))
+						if (moment().format("yyyy-MM-DD") === moment(birthDate).format("yyyy-MM-DD"))
 							throw new Error("تاريخ الميلاد غير صحيح");
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
@@ -188,9 +190,12 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 								}}
 							/>
 							<div className="select flex-both flex-column">
-								<label>النوع</label>
+								<label>
+									النوع <span className="red">*</span>
+								</label>
 								<div className="gender-select">
 									<CustomRadio
+										required
 										name="gender-select"
 										label="ذكر"
 										value={gender === "male"}
