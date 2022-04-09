@@ -9,7 +9,6 @@ const personSchema = mongoose.Schema({
 		type: String,
 		lowercase: true,
 		trim: true,
-		unique: true,
 		sparse: true,
 		partialFilterExpression: { email: { $type: "string" } },
 		validate(val) {
