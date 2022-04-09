@@ -90,6 +90,7 @@ const editPerson = async (req, res) => {
 			await person.save();
 		}
 		if (spouse) {
+			console.log(spouse);
 			spouse.age = moment().diff(spouse.birthDate, "years", true);
 			spouse.spouse = person._id;
 			spouse.children = children.map((child) => {
