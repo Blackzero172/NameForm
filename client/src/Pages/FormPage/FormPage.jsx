@@ -151,7 +151,6 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 								}}
 							/>
 							<CustomInput
-								required
 								type="number"
 								label="عدد الاطفال"
 								defaultValue={(children && children.length) || 0}
