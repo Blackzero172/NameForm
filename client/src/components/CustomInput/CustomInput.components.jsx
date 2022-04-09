@@ -15,7 +15,13 @@ const CustomInput = ({
 }) => {
 	return (
 		<div className="input-container flex-column flex-items">
-			<label htmlFor={name}>{label}</label>
+			{!required ? (
+				<label htmlFor={name}>{label}</label>
+			) : (
+				<label htmlFor={name}>
+					{label} <span className="red">*</span>
+				</label>
+			)}
 			<input
 				onBlur={onBlur}
 				type={type}
