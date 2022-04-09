@@ -1,8 +1,9 @@
 .dashboard .search-bar {
 	width: 100%;
 }
-.dashboard .input-container {
-	align-items: flex-end;
+
+.dashboard .input-container label {
+	align-self: flex-end;
 }
 .dashboard .input-container label {
 	padding-right: 1rem;
@@ -19,7 +20,7 @@
 	width: 100%;
 	background-color: var(--main-color);
 	color: var(--secondary-color);
-	/* padding: 0 1rem; */
+	padding: 0 1rem;
 }
 .dashboard .age-btns {
 	width: 100%;
@@ -34,10 +35,9 @@
 }
 .dashboard .right-section {
 	direction: rtl;
-	padding-right: 1rem;
 }
 .dashboard .right-section .input-container {
-	padding-right: 1rem;
+	margin-left: 1rem;
 }
 .dashboard .right-section .input-container label {
 	margin-left: auto;
