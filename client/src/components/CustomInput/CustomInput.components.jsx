@@ -11,7 +11,7 @@ const CustomInput = ({
 	checked,
 	onBlur,
 	defaultValue,
-	minlength,
+	minLength,
 }) => {
 	return (
 		<div className="input-container flex-column flex-items">
@@ -19,7 +19,7 @@ const CustomInput = ({
 				<label htmlFor={name}>{label}</label>
 			) : (
 				<label htmlFor={name}>
-					{label} <span className="red">*</span>
+					{label} <span className="red">(الزامي)</span>
 				</label>
 			)}
 			<input
@@ -33,7 +33,7 @@ const CustomInput = ({
 				value={value}
 				checked={checked}
 				defaultValue={defaultValue}
-				minlength={minlength}
+				minLength={minLength}
 			/>
 		</div>
 	);

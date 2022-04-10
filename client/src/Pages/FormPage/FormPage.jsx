@@ -10,12 +10,13 @@ import CustomInput from "../../components/CustomInput/CustomInput.components";
 import "./FormPage.css";
 import CustomRadio from "../../components/CustomRadio/CustomRadio";
 const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, updatePerson }) => {
+	const [personCopy, setCopy] = useState({});
+	const [isMarried, setMarried] = useState("");
 	const { email, phoneNumber, secretKey } = credentials;
 	const { name, children, birthDate, spouse, gender } = person;
 	const remoteEmail = person.email;
 	const remotePhoneNumber = person.phoneNumber;
 	const errorMessageRef = useRef();
-	const [personCopy, setCopy] = useState({});
 	const setText = debounce(() => {
 		errorMessageRef.current.innerText = "";
 	}, 4000);
@@ -33,15 +34,13 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 	};
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
-
 		try {
 			await getPerson();
 		} catch (e) {
 			handleErrorMessage(e);
 		}
 	};
-	let requiredCondition = false;
-	if (person.name) if (spouse) requiredCondition = spouse.name || spouse.phoneNumber || spouse.email;
+
 	const changeChildInfo = (child, prop, value) => {
 		const childrenCopy = [...children];
 		const childCopy = childrenCopy[childrenCopy.indexOf(child)];
@@ -63,7 +62,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 					required
 					type="number"
 					label="رقم الهاتف"
-					minlength="10"
+					minLength="10"
 					value={phoneNumber}
 					onChange={(e) => {
 						setCredentials({ ...credentials, phoneNumber: e.target.value });
@@ -92,7 +91,8 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						arRegex.test(name) &&
 						moment().format("yyyy-MM-DD") !== moment(birthDate).format("yyyy-MM-DD") &&
 						isMobilePhone(phoneNumber, "he-IL") &&
-						isEmail(email)
+						isEmail(email) &&
+						phoneNumber !== spouse.phoneNumber
 					) {
 						const filter = children.filter(
 							(child) =>
@@ -115,6 +115,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
 						else if (!arRegex.test(name)) throw new Error("الاسم مسموح فقط في العربية");
+						else if (phoneNumber === spouse.phoneNumber) throw new Error("رقم الهاتف لا يمكن تكراره");
 					}
 				} catch (e) {
 					handleErrorMessage(e);
@@ -128,8 +129,9 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						<div className="form-grid flex-both">
 							<CustomInput
 								required
-								label="الاسم"
+								label=" الاسم الثلاثي"
 								value={name}
+								minLength={5}
 								onChange={(e) => {
 									setUser({ ...person, name: e.target.value });
 								}}
@@ -191,7 +193,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 							/>
 							<div className="select flex-both flex-column">
 								<label>
-									النوع <span className="red">*</span>
+									النوع <span className="red">(الزامي)</span>
 								</label>
 								<div className="gender-select">
 									<CustomRadio
@@ -214,47 +216,72 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 								</div>
 							</div>
 						</div>
-					</div>
-					<div className="window flex-both flex-column">
-						<h2>التفاصيل الزوج/ة</h2>
-						<div className="form-grid flex-both">
-							<CustomInput
-								required={requiredCondition}
-								label="الاسم"
-								value={spouse.name}
-								onChange={(e) => {
-									setUser({ ...person, spouse: { ...spouse, name: e.target.value } });
+						<div className="married-select">
+							<label>
+								متزوج <span className="red">(الزامي)</span>
+							</label>
+							<CustomRadio
+								required
+								name="married-select"
+								label="نعم"
+								value={isMarried && isMarried !== ""}
+								onChange={() => {
+									setMarried(true);
 								}}
 							/>
-							<CustomInput
-								required={requiredCondition}
-								label="رقم الهاتف"
-								minlength="10"
-								value={spouse.phoneNumber}
-								onChange={(e) => {
-									setUser({ ...person, spouse: { ...spouse, phoneNumber: e.target.value } });
-								}}
-							/>
-							<CustomInput
-								required={requiredCondition}
-								label="البريد الالكتروني"
-								value={spouse.email}
-								onChange={(e) => {
-									setUser({ ...person, spouse: { ...spouse, email: e.target.value } });
-								}}
-							/>
-							<CustomInput
-								required={requiredCondition}
-								label="تاريخ الميلاد"
-								value={spouse.birthDate}
-								type="Date"
-								onChange={(e) => {
-									setUser({ ...person, spouse: { ...spouse, birthDate: e.target.value } });
+							<CustomRadio
+								name="married-select"
+								label="لا"
+								value={!isMarried && isMarried !== ""}
+								onChange={() => {
+									setMarried(false);
 								}}
 							/>
 						</div>
 					</div>
-
+					{isMarried && (
+						<div className="window flex-both flex-column">
+							<h2>التفاصيل الزوج/ة</h2>
+							<div className="form-grid flex-both">
+								<CustomInput
+									required
+									label="الاسم الثلاثي"
+									value={spouse.name}
+									minLength={5}
+									onChange={(e) => {
+										setUser({ ...person, spouse: { ...spouse, name: e.target.value } });
+									}}
+								/>
+								<CustomInput
+									required
+									label="رقم الهاتف"
+									minlength="10"
+									value={spouse.phoneNumber}
+									onChange={(e) => {
+										setUser({ ...person, spouse: { ...spouse, phoneNumber: e.target.value } });
+									}}
+								/>
+								<CustomInput
+									type="email"
+									required
+									label="البريد الالكتروني"
+									value={spouse.email}
+									onChange={(e) => {
+										setUser({ ...person, spouse: { ...spouse, email: e.target.value } });
+									}}
+								/>
+								<CustomInput
+									required
+									label="تاريخ الميلاد"
+									value={spouse.birthDate}
+									type="Date"
+									onChange={(e) => {
+										setUser({ ...person, spouse: { ...spouse, birthDate: e.target.value } });
+									}}
+								/>
+							</div>
+						</div>
+					)}
 					{children.map((child, index) => {
 						return <ChildCard child={child} onChange={changeChildInfo} key={child._id} index={index} />;
 					})}
