@@ -42,6 +42,19 @@
 .dashboard .right-section .input-container label {
 	margin-left: auto;
 }
+.dashboard .right-section .age-select {
+	display: flex;
+	align-items: flex-end;
+}
+.dashboard .right-section .age-select div {
+	flex-grow: 1;
+}
+.dashboard .right-section .age-select p {
+	padding-bottom: 1.2rem;
+	text-align: center;
+	margin-right: -0.5rem;
+	margin-left: 0.5rem;
+}
 .dashboard .data-grid,
 .dashboard > .lower-section {
 	width: 100%;
@@ -83,5 +96,29 @@
 	}
 	.dashboard .left-section {
 		padding-right: 1rem;
+	}
+}
+@media print {
+	.dashboard .upper-section .search-bar,
+	.age-btns .right-section {
+		display: none;
+	}
+	.dashboard .upper-section {
+		margin-top: 0.25rem;
+		color: black;
+		background-color: transparent;
+	}
+	.dashboard .upper-section .age-btns {
+		justify-content: center;
+	}
+	.dashboard .lower-section .data-grid .person-card {
+		border: 2px solid black;
+		color: black;
+		break-inside: avoid;
+		margin: 0.25rem;
+	}
+	.dashboard .lower-section .data-grid {
+		display: block;
+		break-inside: avoid;
 	}
 }

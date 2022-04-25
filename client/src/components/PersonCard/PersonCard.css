@@ -1,5 +1,8 @@
 .person-card {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(150px, 1fr));
 	width: 100%;
+	direction: rtl;
 	background-color: var(--main-color);
 	color: var(--secondary-color);
 }
@@ -11,9 +14,6 @@
 	width: 100%;
 	padding-bottom: 1rem;
 }
-.person-card {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(150px, 1fr));
-	width: 100%;
-	direction: rtl;
+.person-card p {
+	margin: 0 0.25rem;
 }

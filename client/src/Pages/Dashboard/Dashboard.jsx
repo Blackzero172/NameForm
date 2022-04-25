@@ -7,8 +7,7 @@ import PersonCard from "../../components/PersonCard/PersonCard";
 import Select from "react-select";
 const Dashboard = () => {
 	const [data, setData] = useState([]);
-	const [ageFilter, setAge] = useState("");
-	const [ageNumber, setAgeLimit] = useState(0);
+	const [ageNumber, setAgeLimit] = useState(["0", "0"]);
 	const [genderFilter, setGender] = useState("");
 	const [searchWord, setSearch] = useState("");
 	const [filteredData, setFilteredData] = useState([]);
@@ -25,10 +24,16 @@ const Dashboard = () => {
 		setFilteredData(
 			data
 				.filter((person) => {
-					if (ageFilter === ">" && ageNumber > 0) return person.age > ageNumber;
-					else if (ageFilter === "<" && ageNumber > 0) return person.age < ageNumber;
-					else if (ageFilter === "" || ageNumber === 0) return true;
-					else return false;
+					if (ageNumber[0] !== "0" && ageNumber[0] !== "" && ageNumber[1] !== "0" && ageNumber[1] !== "") {
+						console.log("MultiFilter");
+						return person.age < ageNumber[0] && person.age > ageNumber[1];
+					} else if (ageNumber[0] !== "0" && ageNumber[0] !== "") {
+						console.log("Filter 0");
+						return person.age < ageNumber[0];
+					} else if (ageNumber[1] !== "0" && ageNumber[1] !== "") {
+						console.log("Filter 1", ageNumber[1] !== "0");
+						return person.age > ageNumber[1];
+					} else return true;
 				})
 				.filter((person) => {
 					const searchCondition = person.name.toLowerCase().includes(searchWord.toLowerCase());
@@ -43,7 +48,7 @@ const Dashboard = () => {
 		);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ageFilter, ageNumber, searchWord, genderFilter]);
+	}, [ageNumber, searchWord, genderFilter]);
 
 	return (
 		<div className="dashboard flex-column flex-items-end">
@@ -60,43 +65,26 @@ const Dashboard = () => {
 				</div>
 				<div className="age-btns flex-items-end flex-content-start flex-reverse">
 					<div className="right-section flex-items-end flex-content-end">
-						<CustomInput
-							placeHolder="...اكتب هنا"
-							label="العمر"
-							type="number"
-							onChange={(e) => {
-								if (e.target.value > 100) {
-									e.target.value = 100;
-								} else if (e.target.value < 0) {
-									e.target.value = 0;
-								} else if (e.target.value === "") setAgeLimit(0);
-								else setAgeLimit(parseInt(e.target.value));
-							}}
-						/>
-						<div className="select flex-both flex-column">
-							<div className="gender-select">
-								<Select
-									placeholder="اخترالاشارة"
-									options={[
-										{ label: "اكبر من", value: ">" },
-										{ label: "اصغر من", value: "<" },
-									]}
-									onChange={(e) => {
-										if (e) setAge(e.value);
-										else setAge("");
-									}}
-									isClearable
-									isRtl
-									isSearchable={false}
-									className="select-container gender-select-container"
-									styles={{
-										control: (provided, state) => ({
-											...provided,
-											textIndent: "1.5rem",
-										}),
-									}}
-								/>
-							</div>
+						<div className="age-select">
+							<CustomInput
+								label="اصغر من"
+								placeHolder="اكتب العمر"
+								value={ageNumber[0]}
+								onChange={(e) => {
+									setAgeLimit([e.target.value, ageNumber[1]]);
+								}}
+								type="number"
+							/>
+							<p>-</p>
+							<CustomInput
+								label="اكبر من"
+								placeHolder="اكتب العمر"
+								value={ageNumber[1]}
+								onChange={(e) => {
+									setAgeLimit([ageNumber[0], e.target.value]);
+								}}
+								type="number"
+							/>
 						</div>
 						<div className="select flex-both flex-column">
 							<label>النوع</label>
