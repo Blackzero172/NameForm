@@ -98,7 +98,18 @@
 		padding-right: 1rem;
 	}
 }
+.print {
+	display: none;
+}
 @media print {
+	@page {
+		@bottom-right {
+			content: counter(page) " of " counter(pages);
+		}
+	}
+	.print {
+		display: unset;
+	}
 	.dashboard .upper-section .search-bar,
 	.age-btns .right-section {
 		display: none;
@@ -110,6 +121,9 @@
 	}
 	.dashboard .upper-section .age-btns {
 		justify-content: center;
+	}
+	.dashboard .age-btns .left-section {
+		text-align: center;
 	}
 	.dashboard .lower-section .data-grid .person-card {
 		border: 2px solid black;

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import moment from "moment";
 import api from "../../api/api";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
 
@@ -114,6 +115,7 @@ const Dashboard = () => {
 						</div>
 					</div>
 					<div className="left-section">
+						<h3 className="print">{moment().format("DD/MM/yyyy")}</h3>
 						<h2>{filteredData.length}:المجموع</h2>
 					</div>
 				</div>
