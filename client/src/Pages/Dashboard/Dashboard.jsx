@@ -26,13 +26,10 @@ const Dashboard = () => {
 			data
 				.filter((person) => {
 					if (ageNumber[0] !== "0" && ageNumber[0] !== "" && ageNumber[1] !== "0" && ageNumber[1] !== "") {
-						console.log("MultiFilter");
 						return person.age < ageNumber[0] && person.age > ageNumber[1];
 					} else if (ageNumber[0] !== "0" && ageNumber[0] !== "") {
-						console.log("Filter 0");
 						return person.age < ageNumber[0];
 					} else if (ageNumber[1] !== "0" && ageNumber[1] !== "") {
-						console.log("Filter 1", ageNumber[1] !== "0");
 						return person.age > ageNumber[1];
 					} else return true;
 				})

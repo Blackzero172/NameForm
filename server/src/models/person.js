@@ -36,6 +36,7 @@ const personSchema = mongoose.Schema({
 	parentName: {
 		type: String,
 	},
+	parent: { type: mongoose.Schema.Types.ObjectId, ref: "Person" },
 	spouse: { type: mongoose.Schema.Types.ObjectId, ref: "Person" },
 	children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Person" }],
 });
