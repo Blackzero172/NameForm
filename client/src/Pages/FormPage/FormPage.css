@@ -31,10 +31,15 @@ button:disabled {
 .select {
 	flex: 1;
 }
-
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+	.window {
+		width: 45%;
+	}
+}
 @media screen and (max-width: 768px) {
 	.window {
 		width: 90%;
+		
 	}
 }
 .error {

@@ -76,8 +76,10 @@
 	padding: 0;
 	width: 100%;
 }
-.dashboard > .lower-section {
-	margin-top: 1rem;
+
+.dashboard .lower-section button {
+	padding: 0.75rem 1rem;
+	margin: 0.25rem;
 }
 @media screen and (max-width: 528px) {
 	.dashboard .age-btns {

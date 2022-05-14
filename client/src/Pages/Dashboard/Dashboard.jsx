@@ -6,13 +6,15 @@ import CustomInput from "../../components/CustomInput/CustomInput.components";
 import "./Dashboard.css";
 import PersonCard from "../../components/PersonCard/PersonCard";
 import Select from "react-select";
+import CustomButton from "../../components/CustomButton/CustomButton.components";
+import AddWindow from "../../components/AddWindow/AddWindow";
 const Dashboard = () => {
 	const [data, setData] = useState([]);
 	const [ageNumber, setAgeLimit] = useState(["0", "0"]);
 	const [genderFilter, setGender] = useState("");
 	const [searchWord, setSearch] = useState("");
 	const [filteredData, setFilteredData] = useState([]);
-
+	const [addWindow, showHideWindow] = useState(false);
 	const getData = async () => {
 		const data = await api.get("/people");
 		setData(data.data);
@@ -49,82 +51,95 @@ const Dashboard = () => {
 	}, [ageNumber, searchWord, genderFilter]);
 
 	return (
-		<div className="dashboard flex-column flex-items-end">
-			<div className="upper-section">
-				<div className="search-bar">
-					<CustomInput
-						label="بحث"
-						placeHolder="...اكتب هنا"
-						value={searchWord}
-						onChange={(e) => {
-							setSearch(e.target.value);
-						}}
-					/>
-				</div>
-				<div className="age-btns flex-items-end flex-content-start flex-reverse">
-					<div className="right-section flex-items-end flex-content-end">
-						<div className="age-select">
-							<CustomInput
-								label="اصغر من"
-								placeHolder="اكتب العمر"
-								value={ageNumber[0]}
-								onChange={(e) => {
-									setAgeLimit([e.target.value, ageNumber[1]]);
-								}}
-								type="number"
-							/>
-							<p>-</p>
-							<CustomInput
-								label="اكبر من"
-								placeHolder="اكتب العمر"
-								value={ageNumber[1]}
-								onChange={(e) => {
-									setAgeLimit([ageNumber[0], e.target.value]);
-								}}
-								type="number"
-							/>
-						</div>
-						<div className="select flex-both flex-column">
-							<label>النوع</label>
-							<div className="gender-select">
-								<Select
-									placeholder="اختر النوع"
-									options={[
-										{ label: "ذكر", value: "male" },
-										{ label: "انثى", value: "female" },
-									]}
+		<>
+			{addWindow && <AddWindow />}
+			<div className="dashboard flex-column flex-items-end">
+				<div className="upper-section">
+					<div className="search-bar">
+						<CustomInput
+							label="بحث"
+							placeHolder="...اكتب هنا"
+							value={searchWord}
+							onChange={(e) => {
+								setSearch(e.target.value);
+							}}
+						/>
+					</div>
+					<div className="age-btns flex-items-end flex-content-start flex-reverse">
+						<div className="right-section flex-items-end flex-content-end">
+							<div className="age-select">
+								<CustomInput
+									label="اصغر من"
+									placeHolder="اكتب العمر"
+									value={ageNumber[0]}
 									onChange={(e) => {
-										if (e) setGender(e.value);
-										else setGender("");
+										setAgeLimit([e.target.value, ageNumber[1]]);
 									}}
-									isClearable
-									isRtl
-									isSearchable={false}
-									className="select-container"
-									styles={{
-										control: (provided, state) => ({
-											...provided,
-											textIndent: "1.5rem",
-										}),
+									type="number"
+								/>
+								<p>-</p>
+								<CustomInput
+									label="اكبر من"
+									placeHolder="اكتب العمر"
+									value={ageNumber[1]}
+									onChange={(e) => {
+										setAgeLimit([ageNumber[0], e.target.value]);
 									}}
+									type="number"
 								/>
 							</div>
+							<div className="select flex-both flex-column">
+								<label>النوع</label>
+								<div className="gender-select">
+									<Select
+										placeholder="اختر النوع"
+										options={[
+											{ label: "ذكر", value: "male" },
+											{ label: "انثى", value: "female" },
+										]}
+										onChange={(e) => {
+											if (e) setGender(e.value);
+											else setGender("");
+										}}
+										isClearable
+										isRtl
+										isSearchable={false}
+										className="select-container"
+										styles={{
+											control: (provided, state) => ({
+												...provided,
+												textIndent: "1.5rem",
+											}),
+										}}
+									/>
+								</div>
+							</div>
+						</div>
+						<div className="left-section">
+							<h3 className="print">{moment().format("DD/MM/yyyy")}</h3>
+							<h2>{filteredData.length}:المجموع</h2>
 						</div>
 					</div>
-					<div className="left-section">
-						<h3 className="print">{moment().format("DD/MM/yyyy")}</h3>
-						<h2>{filteredData.length}:المجموع</h2>
+				</div>
+				<div className="lower-section">
+					<div className="btn-container flex-content">
+						<CustomButton
+							text=" اضافة"
+							onClick={() => {
+								showHideWindow(true);
+							}}
+						>
+							<i className="fas fa-plus"></i>
+						</CustomButton>
+					</div>
+					<div className="data-grid">
+						{filteredData.map((person) => {
+							return <PersonCard person={person} key={person._id} />;
+						})}
 					</div>
 				</div>
 			</div>
-			<div className="lower-section">
-				<div className="data-grid">
-					{filteredData.map((person) => {
-						return <PersonCard person={person} key={person._id} />;
-					})}
-				</div>
-			</div>
-		</div>
+		</>
 	);
 };
 export default Dashboard;

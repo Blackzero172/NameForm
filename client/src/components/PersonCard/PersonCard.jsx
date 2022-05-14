@@ -6,7 +6,7 @@ const PersonCard = ({ person }) => {
 			<p>الاسم : {person.name}</p>
 			{person.phoneNumber && <p>رقم الهاتف : {person.phoneNumber}</p>}
 			{person.parent && !person.phoneNumber && <p>اسم الوالد/ة :{person.parent.name} </p>}
-			<p>العمر : {Number(person.age).toFixed(1)}</p>
+			<p>العمر : {Number(person.age).toFixed(0)}</p>
 			<p>تاريخ الميلاد : {moment(person.birthDate).format("DD/MM/YYYY")}</p>
 			{person.parent && person.phoneNumber && <p>اسم الوالد/ة :{person.parent.name} </p>}
 			{person.spouse && <p>اسم الزوج/ة : {person.spouse.name}</p>}

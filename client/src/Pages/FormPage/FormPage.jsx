@@ -92,12 +92,17 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						moment().format("yyyy-MM-DD") !== moment(birthDate).format("yyyy-MM-DD") &&
 						isMobilePhone(phoneNumber, "he-IL") &&
 						isEmail(email) &&
-						phoneNumber !== spouse.phoneNumber &&
-						arRegex.test(spouse.name) &&
-						moment().format("yyyy-MM-DD") !== moment(spouse.birthDate).format("yyyy-MM-DD") &&
-						isMobilePhone(spouse.phoneNumber, "he-IL") &&
-						isEmail(spouse.email)
+						phoneNumber !== spouse.phoneNumber
 					) {
+						if (
+							spouse &&
+							arRegex.test(spouse.name) &&
+							moment().format("yyyy-MM-DD") !== moment(spouse.birthDate).format("yyyy-MM-DD") &&
+							isMobilePhone(spouse.phoneNumber, "he-IL") &&
+							isEmail(spouse.email)
+						) {
+						}
+
 						const filter = children.filter(
 							(child) =>
 								moment().format("yyyy-MM-DD") === moment(child.birthDate).format("yyyy-MM-DD") &&
@@ -119,13 +124,15 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, setUser, upd
 						else if (!isMobilePhone(phoneNumber, "he-IL")) throw new Error("رقم الهاتف غير صحيح");
 						else if (!isEmail(email)) throw new Error("البريد الالكتروني غير صحيح");
 						else if (!arRegex.test(name)) throw new Error("الاسم مسموح فقط في العربية");
-						if (moment().format("yyyy-MM-DD") === moment(spouse.birthDate).format("yyyy-MM-DD"))
-							throw new Error("تاريخ الميلاد الزوج/ة غير صحيح");
-						else if (!isMobilePhone(spouse.phoneNumber, "he-IL"))
-							throw new Error("رقم الهاتف الزوج/ة غير صحيح");
-						else if (!isEmail(spouse.email)) throw new Error("البريد الالكتروني الزوج/ة غير صحيح");
-						else if (!arRegex.test(spouse.name)) throw new Error("اسم الزوج/ة مسموح فقط في العربية");
-						else if (phoneNumber === spouse.phoneNumber) throw new Error("رقم الهاتف لا يمكن تكراره");
+						if (spouse) {
+							if (moment().format("yyyy-MM-DD") === moment(spouse.birthDate).format("yyyy-MM-DD"))
+								throw new Error("تاريخ الميلاد الزوج/ة غير صحيح");
+							else if (!isMobilePhone(spouse.phoneNumber, "he-IL"))
+								throw new Error("رقم الهاتف الزوج/ة غير صحيح");
+							else if (!isEmail(spouse.email)) throw new Error("البريد الالكتروني الزوج/ة غير صحيح");
+							else if (!arRegex.test(spouse.name)) throw new Error("اسم الزوج/ة مسموح فقط في العربية");
+							else if (phoneNumber === spouse.phoneNumber) throw new Error("رقم الهاتف لا يمكن تكراره");
+						}
 					}
 				} catch (e) {
 					handleErrorMessage(e);

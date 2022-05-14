@@ -13,6 +13,7 @@ import "./App.css";
 
 function App() {
 	const [loggedInUser, setUser] = useState({});
+	const [person, setPerson] = useState({});
 	const [credentials, setCredentials] = useState({
 		email: "",
 		password: "",
@@ -53,7 +54,7 @@ function App() {
 					_id: new mongoose.Types.ObjectId(),
 					gender: person.gender === "male" ? "female" : "male",
 				};
-			setUser(person);
+			setPerson(person);
 		} catch (e) {
 			throw new Error(e.response.data);
 		} finally {
@@ -63,8 +64,8 @@ function App() {
 	const updatePerson = async () => {
 		setLoading(true);
 		try {
-			if (!loggedInUser.spouse.hasOwnProperty("name")) delete loggedInUser.spouse;
-			const response = await api.put("/people", loggedInUser);
+			if (!person.spouse.hasOwnProperty("name")) delete person.spouse;
+			const response = await api.put("/people", person);
 			return response.data;
 		} catch (e) {
 			throw new Error(e.response.data);
@@ -88,8 +89,8 @@ function App() {
 						setCredentials={setCredentials}
 						credentials={credentials}
 						getPerson={getData}
-						person={loggedInUser}
-						setUser={setUser}
+						person={person}
+						setUser={setPerson}
 						updatePerson={updatePerson}
 					/>
 				</Route>
