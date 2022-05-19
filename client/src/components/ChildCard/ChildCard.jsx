@@ -7,7 +7,8 @@ const ChildCard = ({ child, onChange, index }) => {
 	const { name, phoneNumber, birthDate, email, gender } = child;
 	return (
 		<div className="child-card flex-both">
-			<div className="window flex-column">
+			<div className="window flex-column flex-items">
+				<h2>تفاصيل الطفل</h2>
 				<div className="form-grid">
 					<CustomInput
 						required

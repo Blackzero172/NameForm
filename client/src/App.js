@@ -13,7 +13,7 @@ import "./App.css";
 
 function App() {
 	const [loggedInUser, setUser] = useState({});
-	const [person, setPerson] = useState({});
+	const [person, setPerson] = useState({ children: [], spouse: { _id: new mongoose.Types.ObjectId() } });
 	const [credentials, setCredentials] = useState({
 		email: "",
 		password: "",
@@ -33,6 +33,7 @@ function App() {
 			const res = await api.post("/users/login", credentials);
 			const user = res.data.user;
 			setUser(user);
+			setCredentials({});
 		} catch (e) {
 			return e.response.data;
 		} finally {
@@ -66,6 +67,7 @@ function App() {
 		try {
 			if (!person.spouse.hasOwnProperty("name")) delete person.spouse;
 			const response = await api.put("/people", person);
+			console.log(response);
 			return response.data;
 		} catch (e) {
 			throw new Error(e.response.data);
@@ -81,7 +83,7 @@ function App() {
 					{!loggedInUser.hasOwnProperty("name") ? (
 						<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
 					) : (
-						<Dashboard />
+						<Dashboard person={person} updatePerson={setPerson} editPerson={updatePerson} />
 					)}
 				</Route>
 				<Route path="/form">

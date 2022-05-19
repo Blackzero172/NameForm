@@ -97,6 +97,7 @@ const editPerson = async (req, res) => {
 				age: moment().diff(birthDate, "years", true),
 			});
 			if (spouse) person.spouse = spouse._id;
+			else person.spouse = undefined;
 			await person.save();
 		} else {
 			person.email = email;
@@ -137,16 +138,20 @@ const editPerson = async (req, res) => {
 			}
 		}
 		children.forEach(async (child) => {
-			child.age = moment().diff(child.birthDate, "years", true);
-			let newChild = await Person.findById(child._id);
-			if (!newChild) newChild = new Person(child);
-			else {
-				newChild.name = child.name;
-				newChild.birthDate = child.birthDate;
-				newChild.phoneNumber = child.phoneNumber;
-				newChild.age = child.age;
+			try {
+				child.age = moment().diff(child.birthDate, "years", true);
+				let newChild = await Person.findById(child._id);
+				if (!newChild) newChild = new Person(child);
+				else {
+					newChild.name = child.name;
+					newChild.birthDate = child.birthDate;
+					newChild.phoneNumber = child.phoneNumber;
+					newChild.age = child.age;
+				}
+				await newChild.save();
+			} catch (e) {
+				console.error(e);
 			}
-			await newChild.save();
 		});
 		res.send(person);
 	} catch (e) {

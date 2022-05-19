@@ -8,7 +8,7 @@ import PersonCard from "../../components/PersonCard/PersonCard";
 import Select from "react-select";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import AddWindow from "../../components/AddWindow/AddWindow";
-const Dashboard = () => {
+const Dashboard = ({ person, updatePerson, editPerson }) => {
 	const [data, setData] = useState([]);
 	const [ageNumber, setAgeLimit] = useState(["0", "0"]);
 	const [genderFilter, setGender] = useState("");
@@ -52,7 +52,16 @@ const Dashboard = () => {
 
 	return (
 		<>
-			{addWindow && <AddWindow />}
+			{addWindow && (
+				<AddWindow
+					person={person}
+					updatePerson={updatePerson}
+					editPerson={editPerson}
+					closeWindow={() => {
+						showHideWindow(false);
+					}}
+				/>
+			)}
 			<div className="dashboard flex-column flex-items-end">
 				<div className="upper-section">
 					<div className="search-bar">

@@ -1,7 +1,8 @@
 .login-page {
 	height: 100vh;
 }
-.window {
+.login-page .window,
+.form-page .window {
 	background-color: var(--main-color);
 	color: var(--secondary-color);
 	padding: 1rem;

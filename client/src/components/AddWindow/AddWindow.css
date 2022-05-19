@@ -11,20 +11,78 @@
 	display: none;
 }
 .add-window .window {
-	width: 65%;
+	min-width: 60%;
 	height: 65vh;
 	background-color: var(--main-color);
-	overflow-y: scroll;
+	color: white;
+	text-align: center;
+	position: relative;
 }
 .inputs-container {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	padding: 0.5rem;
+	overflow-y: scroll;
 }
+
 .add-window .window .btn-container {
 	margin-top: auto;
 	border-top: 1px solid gray;
 	height: 10%;
 }
+
 .add-window .window .btn-container button {
 	margin: 0.5rem;
+}
+.add-window .child-card {
+	border: 2px solid white;
+	margin: 0;
+	margin-bottom: 1rem;
+}
+@media screen and (min-width: 1210px) {
+	.inputs-container::-webkit-scrollbar {
+		width: 0;
+	}
+}
+.select {
+	margin-bottom: 2rem;
+}
+.btn-container .prev-btn,
+.add-window .window .cancel-btn {
+	color: red;
+	border-color: red;
+}
+.btn-container .next-btn {
+	color: lightgreen;
+	border-color: lightgreen;
+}
+.btn-container .prev-btn:hover,
+.add-window .window .cancel-btn:hover {
+	color: white;
+	background-color: red;
+	border-color: red;
+}
+.btn-container .prev-btn:active.add-window .window .cancel-btn:active {
+	color: white;
+	background-color: darkred;
+	border-color: darkred;
+}
+.btn-container .next-btn:hover {
+	color: white;
+	background-color: lightgreen;
+	border-color: lightgreen;
+}
+.btn-container .next-btn:active {
+	color: white;
+	background-color: green;
+	border-color: green;
+}
+.add-window .window .cancel-btn {
+	position: absolute;
+	top: 0.5rem;
+	right: 1rem;
+	padding: 0.5rem 0.6rem;
+	border: 2px solid red;
+	transition: all 0.3s ease;
+	cursor: pointer;
 }
