@@ -4,15 +4,20 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 const getPerson = async (req, res) => {
 	try {
-		const { email, phoneNumber } = req.body;
-		if (!validator.isEmail(email)) return res.status(400).send("Invalid Email");
-		if (!validator.isMobilePhone(phoneNumber, "he-IL")) return res.status(400).send("Invalid Phone Number");
-		const person = await Person.findOne({
-			email: email.toLowerCase(),
-			phoneNumber: phoneNumber,
-		})
-			.populate("children")
-			.populate("spouse");
+		const { email, phoneNumber, id } = req.body;
+		let person;
+		if (!id) {
+			if (!validator.isEmail(email)) return res.status(400).send("Invalid Email");
+			if (!validator.isMobilePhone(phoneNumber, "he-IL")) return res.status(400).send("Invalid Phone Number");
+			person = await Person.findOne({
+				email: email.toLowerCase().trim(),
+				phoneNumber: phoneNumber,
+			})
+				.populate("children")
+				.populate("spouse");
+		} else {
+			person = await Person.findById(id);
+		}
 		if (!person)
 			return res.send({
 				_id: new mongoose.Types.ObjectId(),
@@ -20,7 +25,7 @@ const getPerson = async (req, res) => {
 				email,
 				phoneNumber,
 				children: [],
-				birthDate: new Date(),
+				birthDate: "",
 				gender: "",
 				spouse: { _id: new mongoose.Types.ObjectId() },
 				age: 0,
@@ -77,7 +82,7 @@ const getAllPeople = async (req, res) => {
 		);
 	} catch (e) {
 		console.log(e);
-		res.status(500).send(e);
+		res.status(500).send(`Server Error :${e}`);
 	}
 };
 const editPerson = async (req, res) => {
@@ -96,7 +101,7 @@ const editPerson = async (req, res) => {
 				birthDate,
 				age: moment().diff(birthDate, "years", true),
 			});
-			if (spouse) person.spouse = spouse._id;
+			if (spouse.name) person.spouse = spouse._id;
 			else person.spouse = undefined;
 			await person.save();
 		} else {
@@ -108,11 +113,12 @@ const editPerson = async (req, res) => {
 			person.children = children.map((child) => {
 				return child._id;
 			});
-			if (spouse) person.spouse = spouse._id;
+			if (spouse.name) person.spouse = spouse._id;
+			else person.spouse = undefined;
 			person.age = moment().diff(birthDate, "years", true);
 			await person.save();
 		}
-		if (spouse) {
+		if (spouse.name) {
 			spouse.age = moment().diff(spouse.birthDate, "years", true);
 			spouse.spouse = person._id;
 			spouse.children = children.map((child) => {
@@ -157,7 +163,7 @@ const editPerson = async (req, res) => {
 	} catch (e) {
 		console.log(e);
 		if (e.message.includes("E11000")) return res.status(400).send("User already Exists!");
-		res.status(500).send(e.message);
+		res.status(500).send(`Server Error :${e.message}`);
 	}
 };
 module.exports = { getPerson, editPerson, getAllPeople };

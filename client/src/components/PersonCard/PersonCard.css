@@ -1,6 +1,4 @@
 .person-card {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(150px, 1fr));
 	width: 100%;
 	direction: rtl;
 	background-color: var(--main-color);
@@ -8,9 +6,12 @@
 	font-size: 15px;
 	padding: 0 0.2rem;
 }
-.person-card > .upper-section,
-.person-card > .lower-section {
-	margin: 1rem;
+.info-container {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(150px, 1fr));
+}
+.btn-container {
+	margin-top: auto;
 }
 .person-card .parent-container {
 	width: 100%;

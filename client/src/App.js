@@ -40,10 +40,10 @@ function App() {
 			setLoading(false);
 		}
 	};
-	const getData = async () => {
+	const getData = async (req) => {
 		setLoading(true);
 		try {
-			const data = await api.post(`/people/`, credentials);
+			const data = await api.post(`/people/`, req);
 			const person = data.data;
 			person.birthDate = moment(person.birthDate).format("yyyy-MM-DD");
 			person.children.forEach((child) => {
@@ -57,7 +57,7 @@ function App() {
 				};
 			setPerson(person);
 		} catch (e) {
-			throw new Error(e.response.data);
+			throw new Error(e);
 		} finally {
 			setLoading(false);
 		}
@@ -65,12 +65,10 @@ function App() {
 	const updatePerson = async () => {
 		setLoading(true);
 		try {
-			if (!person.spouse.hasOwnProperty("name")) delete person.spouse;
 			const response = await api.put("/people", person);
-			console.log(response);
-			return response.data;
+			return response.status;
 		} catch (e) {
-			throw new Error(e.response.data);
+			throw new Error(e);
 		} finally {
 			setLoading(false);
 		}
@@ -83,7 +81,13 @@ function App() {
 					{!loggedInUser.hasOwnProperty("name") ? (
 						<LoginPage setCredentials={setCredentials} credentials={credentials} onLogin={onLogin} />
 					) : (
-						<Dashboard person={person} updatePerson={setPerson} editPerson={updatePerson} />
+						<Dashboard
+							person={person}
+							updatePerson={setPerson}
+							editPerson={updatePerson}
+							getPerson={getData}
+							setLoading={setLoading}
+						/>
 					)}
 				</Route>
 				<Route path="/form">
@@ -92,8 +96,8 @@ function App() {
 						credentials={credentials}
 						getPerson={getData}
 						person={person}
-						setUser={setPerson}
-						updatePerson={updatePerson}
+						updatePerson={setPerson}
+						editPerson={updatePerson}
 					/>
 				</Route>
 			</Switch>

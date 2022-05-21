@@ -3,7 +3,9 @@
 	padding: 1rem 0;
 	flex-wrap: wrap;
 }
-
+.confirm-text {
+	height: 100vh;
+}
 .form-page .form-grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(160px, 1fr));
@@ -39,7 +41,6 @@ button:disabled {
 @media screen and (max-width: 768px) {
 	.window {
 		width: 90%;
-		
 	}
 }
 .error {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import moment from "moment";
+import mongoose from "mongoose";
 import api from "../../api/api";
 import CustomInput from "../../components/CustomInput/CustomInput.components";
 
@@ -8,7 +9,7 @@ import PersonCard from "../../components/PersonCard/PersonCard";
 import Select from "react-select";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import AddWindow from "../../components/AddWindow/AddWindow";
-const Dashboard = ({ person, updatePerson, editPerson }) => {
+const Dashboard = ({ person, updatePerson, editPerson, getPerson, setLoading }) => {
 	const [data, setData] = useState([]);
 	const [ageNumber, setAgeLimit] = useState(["0", "0"]);
 	const [genderFilter, setGender] = useState("");
@@ -16,12 +17,20 @@ const Dashboard = ({ person, updatePerson, editPerson }) => {
 	const [filteredData, setFilteredData] = useState([]);
 	const [addWindow, showHideWindow] = useState(false);
 	const getData = async () => {
-		const data = await api.get("/people");
-		setData(data.data);
-		setFilteredData(data.data);
+		setLoading(true);
+		try {
+			const data = await api.get("/people");
+			setData(data.data);
+			setFilteredData(data.data);
+		} catch (e) {
+			console.error(e);
+		} finally {
+			setLoading(false);
+		}
 	};
 	useEffect(() => {
 		getData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	useEffect(() => {
 		setFilteredData(
@@ -60,8 +69,10 @@ const Dashboard = ({ person, updatePerson, editPerson }) => {
 					closeWindow={() => {
 						showHideWindow(false);
 					}}
+					getData={getData}
 				/>
 			)}
+
 			<div className="dashboard flex-column flex-items-end">
 				<div className="upper-section">
 					<div className="search-bar">
@@ -135,6 +146,13 @@ const Dashboard = ({ person, updatePerson, editPerson }) => {
 						<CustomButton
 							text=" اضافة"
 							onClick={() => {
+								updatePerson({
+									children: [],
+									spouse: {
+										_id: new mongoose.Types.ObjectId(),
+										gender: person.gender === "male" ? "female" : "male",
+									},
+								});
 								showHideWindow(true);
 							}}
 						>
@@ -143,7 +161,19 @@ const Dashboard = ({ person, updatePerson, editPerson }) => {
 					</div>
 					<div className="data-grid">
 						{filteredData.map((person) => {
-							return <PersonCard person={person} key={person._id} />;
+							return (
+								<PersonCard
+									person={person}
+									key={person._id}
+									updatePerson={async () => {
+										updatePerson(person);
+										if (person.email && person.phoneNumber)
+											await getPerson({ email: person.email, phoneNumber: person.phoneNumber });
+										else await getPerson({ id: person._id });
+										showHideWindow(true);
+									}}
+								/>
+							);
 						})}
 					</div>
 				</div>

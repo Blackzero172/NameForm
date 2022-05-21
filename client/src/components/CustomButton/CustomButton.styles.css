@@ -13,18 +13,13 @@ button {
 button p {
 	pointer-events: none;
 }
-button:hover {
+button:hover:enabled {
 	background: var(--secondary-color);
 	color: var(--main-color);
 }
-button:active {
+button:active:enabled {
 	border-color: var(--secondary-color-active);
 	background: var(--secondary-color-active);
-}
-button:disabled {
-	background-color: var(--main-color-active);
-	color: var(--secondary-color-active);
-	cursor: unset;
 }
 button i {
 	pointer-events: none;

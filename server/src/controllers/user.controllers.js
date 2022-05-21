@@ -66,7 +66,7 @@ const login = async (req, res) => {
 			res.clearCookie("token");
 			const user = await User.findByToken(token);
 			if (user) {
-				user.tokens = user.tokens.filter((currentToken) => currentToken.token !== token);
+				user.tokens = user.tokens.filter((currentToken) => currentToken.token !== token.token);
 				await user.save();
 			}
 		}

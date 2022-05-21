@@ -4,8 +4,8 @@ const User = require("../models/user");
 const auth = async (req, res, next) => {
 	try {
 		const { token } = req.cookies;
-		const secretKey = req.body.secretKey;
-		if (secretKey === process.env.SECRET_KEY) return next();
+		const secretKey = req.body.secretKey || "";
+		if (secretKey.toLowerCase().trim() === process.env.SECRET_KEY) return next();
 		const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
 		const user = await User.findOne({ _id: decodedToken._id, "tokens.token": token });
 		if (!user) throw new Error();

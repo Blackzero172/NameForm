@@ -67,15 +67,20 @@
 	background-color: darkred;
 	border-color: darkred;
 }
-.btn-container .next-btn:hover {
+.btn-container .next-btn:hover:enabled {
 	color: white;
 	background-color: lightgreen;
 	border-color: lightgreen;
 }
-.btn-container .next-btn:active {
+.btn-container .next-btn:active:enabled {
 	color: white;
 	background-color: green;
 	border-color: green;
+}
+.btn-container .next-btn:disabled {
+	color: gray;
+	border-color: gray;
+	cursor: initial;
 }
 .add-window .window .cancel-btn {
 	position: absolute;
@@ -85,4 +90,7 @@
 	border: 2px solid red;
 	transition: all 0.3s ease;
 	cursor: pointer;
+}
+.add-window.alt .cancel-btn {
+	display: none;
 }
