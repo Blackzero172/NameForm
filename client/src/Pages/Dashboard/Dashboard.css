@@ -45,16 +45,12 @@
 .dashboard .right-section .age-select {
 	display: flex;
 	align-items: flex-end;
+	padding-bottom: 2rem;
 }
 .dashboard .right-section .age-select div {
 	flex-grow: 1;
 }
-.dashboard .right-section .age-select p {
-	padding-bottom: 1.2rem;
-	text-align: center;
-	margin-right: -0.5rem;
-	margin-left: 0.5rem;
-}
+
 .dashboard .data-grid,
 .dashboard > .lower-section {
 	width: 100%;
@@ -111,6 +107,9 @@
 	}
 	.print {
 		display: unset;
+	}
+	.lower-section .btn-container {
+		display: none;
 	}
 	.dashboard .upper-section .search-bar,
 	.age-btns .right-section {

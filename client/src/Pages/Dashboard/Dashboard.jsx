@@ -97,7 +97,6 @@ const Dashboard = ({ person, updatePerson, editPerson, getPerson, setLoading }) 
 									}}
 									type="number"
 								/>
-								<p>-</p>
 								<CustomInput
 									label="اكبر من"
 									placeHolder="اكتب العمر"
