@@ -48,7 +48,8 @@
 	margin-bottom: 2rem;
 }
 .btn-container .prev-btn,
-.add-window .window .cancel-btn {
+.add-window .window .cancel-btn,
+.upper-section .logout-btn {
 	color: red;
 	border-color: red;
 }
@@ -57,12 +58,14 @@
 	border-color: lightgreen;
 }
 .btn-container .prev-btn:hover,
-.add-window .window .cancel-btn:hover {
+.add-window .window .cancel-btn:hover,
+.upper-section .logout-btn:hover {
 	color: white;
 	background-color: red;
 	border-color: red;
 }
-.btn-container .prev-btn:active.add-window .window .cancel-btn:active {
+.btn-container .prev-btn:active.add-window .window .cancel-btn:active,
+.upper-section .logout-btn:active {
 	color: white;
 	background-color: darkred;
 	border-color: darkred;

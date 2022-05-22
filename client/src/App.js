@@ -40,6 +40,17 @@ function App() {
 			setLoading(false);
 		}
 	};
+	const onLogout = async () => {
+		setLoading(true);
+		try {
+			await api.post("/users/logout");
+			setUser({});
+		} catch (e) {
+			console.error(e.response.data);
+		} finally {
+			setLoading(false);
+		}
+	};
 	const getData = async (req) => {
 		setLoading(true);
 		try {
@@ -87,6 +98,7 @@ function App() {
 							editPerson={updatePerson}
 							getPerson={getData}
 							setLoading={setLoading}
+							onLogout={onLogout}
 						/>
 					)}
 				</Route>

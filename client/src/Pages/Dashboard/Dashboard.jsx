@@ -9,7 +9,7 @@ import PersonCard from "../../components/PersonCard/PersonCard";
 import Select from "react-select";
 import CustomButton from "../../components/CustomButton/CustomButton.components";
 import AddWindow from "../../components/AddWindow/AddWindow";
-const Dashboard = ({ person, updatePerson, editPerson, getPerson, setLoading }) => {
+const Dashboard = ({ person, updatePerson, editPerson, getPerson, setLoading, onLogout }) => {
 	const [data, setData] = useState([]);
 	const [ageNumber, setAgeLimit] = useState(["0", "0"]);
 	const [genderFilter, setGender] = useState("");
@@ -75,6 +75,7 @@ const Dashboard = ({ person, updatePerson, editPerson, getPerson, setLoading }) 
 
 			<div className="dashboard flex-column flex-items-end">
 				<div className="upper-section">
+					<CustomButton text="خروج" classes="logout-btn" onClick={onLogout} />
 					<div className="search-bar">
 						<CustomInput
 							label="بحث"

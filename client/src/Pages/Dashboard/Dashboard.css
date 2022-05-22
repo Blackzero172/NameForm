@@ -50,6 +50,10 @@
 .dashboard .right-section .age-select div {
 	flex-grow: 1;
 }
+.upper-section .logout-btn {
+	position: absolute;
+	margin-top: 0.5rem;
+}
 
 .dashboard .data-grid,
 .dashboard > .lower-section {
