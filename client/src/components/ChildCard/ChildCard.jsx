@@ -49,6 +49,7 @@ const ChildCard = ({ child, onChange, index, stateSetValid }) => {
 						}}
 						label="البريد الالكتروني"
 						value={email}
+						type="email"
 						onChange={(e) => {
 							onChange(child, "email", e.target.value);
 						}}

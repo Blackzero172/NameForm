@@ -6,13 +6,14 @@
 	left: 0;
 	backdrop-filter: blur(2px);
 	z-index: 1;
+	overflow-y: scroll;
 }
 .add-window .window::-webkit-scrollbar {
 	display: none;
 }
 .add-window .window {
 	min-width: 60%;
-	height: 65vh;
+	min-height: 65vh;
 	background-color: var(--main-color);
 	color: white;
 	text-align: center;
@@ -93,6 +94,7 @@
 	border: 2px solid red;
 	transition: all 0.3s ease;
 	cursor: pointer;
+	z-index: 100;
 }
 .add-window.alt .cancel-btn {
 	display: none;

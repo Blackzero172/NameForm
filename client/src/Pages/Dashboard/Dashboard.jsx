@@ -45,7 +45,10 @@ const Dashboard = ({ person, updatePerson, editPerson, getPerson, setLoading, on
 					} else return true;
 				})
 				.filter((person) => {
-					const searchCondition = person.name.toLowerCase().includes(searchWord.toLowerCase());
+					const searchCondition =
+						person.name.includes(searchWord) ||
+						person.parent?.name.includes(searchWord) ||
+						person.spouse?.name.includes(searchWord);
 					if ((searchCondition && searchWord !== "") || searchWord === "") return true;
 					else return false;
 				})

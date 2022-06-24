@@ -109,6 +109,9 @@
 			content: counter(page) " of " counter(pages);
 		}
 	}
+	.logout-btn {
+		display: none;
+	}
 	.print {
 		display: unset;
 	}

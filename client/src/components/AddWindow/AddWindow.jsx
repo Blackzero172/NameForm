@@ -38,7 +38,7 @@ const AddWindow = ({ person, updatePerson, editPerson, closeWindow, theme, getDa
 		updatePerson({ ...person, children: childrenCopy });
 	};
 	return (
-		<form className={`add-window flex-both ${theme}`} onSubmit={handleStepSubmit}>
+		<form className={`add-window flex-both `} onSubmit={handleStepSubmit}>
 			<div className="window flex-column">
 				<div className="cancel-btn flex-both" onClick={closeWindow}>
 					<i className="fas fa-times"></i>

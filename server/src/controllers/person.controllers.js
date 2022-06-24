@@ -2,6 +2,7 @@ const Person = require("../models/person");
 const validator = require("validator");
 const mongoose = require("mongoose");
 const moment = require("moment");
+const _ = require("lodash");
 const getPerson = async (req, res) => {
 	try {
 		const { email, phoneNumber, id } = req.body;
@@ -37,49 +38,41 @@ const getPerson = async (req, res) => {
 };
 const getAllPeople = async (req, res) => {
 	try {
-		let married = await Person.find({ spouse: { $exists: true } })
+		let parents = await Person.find({
+			$or: [{ "children.0": { $exists: true } }, { spouse: { $exists: true } }],
+		})
 			.populate({ path: "spouse", populate: { path: "spouse" } })
-			.populate({ path: "children", populate: { path: "parent" } });
-		for (let i = 0; i < married.length; i++) {
-			const person = married[i];
-			if (person.spouse)
-				married = married.filter((spouse) => {
-					return !person.spouse._id.equals(spouse._id);
-				});
-		}
-		let notMarried = await Person.find({
-			$and: [{ spouse: { $exists: false } }, { parent: { $exists: false } }],
-		}).populate({ path: "children", populate: { path: "parent" } });
-		const allPeople = [...married, ...notMarried];
-		const parents = allPeople.filter((person) => person.children.length > 0);
-
-		let allChildren = [];
-		parents.forEach((parent) => {
-			allChildren.push(...parent.children);
-		});
-		let filteredPeople = [];
-		allChildren.forEach((child) => {
-			filteredPeople = allPeople.filter((person) => {
-				return (
-					moment(person.birthDate).diff(child.birthDate, "days") !== 0 &&
-					person.name.split(" ")[0] !== child.name.split(" ")[0]
-				);
+			.populate({
+				path: "children",
+				populate: { path: "parent" },
 			});
+		parents.sort((a, b) => b.children.length - a.children.length);
+		for (let i = 0; i < parents.length; i++) {
+			const parent = parents[i];
+			if (parent.spouse) parents = parents.filter((spouse) => !parent.spouse._id.equals(spouse._id));
+		}
+		let children = await Person.find({
+			parent: { $exists: false },
+			"children.0": { $exists: false },
+			spouse: { $exists: false },
 		});
-		if (allPeople.length < 1) return res.status(404).send("No Data Found");
-		let families = [];
-		filteredPeople.forEach((person) => {
-			families.push(person, person.spouse, ...person.children);
+		const people = [];
+		parents.forEach((parent) => {
+			if (parent.spouse) people.push(parent, parent.spouse, ...parent.children);
+			else people.push(parent, ...parent.children);
 		});
-		families = families.filter((person) => person);
-		res.send(families);
-		const people = await Person.find({});
-		await Promise.all(
-			people.map((person) => {
-				person.age = moment().diff(person.birthDate, "years", true);
-				person.save();
-			})
-		);
+		children.forEach((child) => {
+			if (
+				!people.find(
+					(person) =>
+						moment(person.birthDate).diff(child.birthDate, "days") === 0 &&
+						person.name.split(" ")[0] === child.name.split(" ")[0]
+				)
+			)
+				people.push(child);
+		});
+
+		res.send(people);
 	} catch (e) {
 		console.log(e);
 		res.status(500).send(`Server Error :${e}`);
