@@ -13,12 +13,11 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, editPerson, 
 		errorMessageRef.current.innerText = "";
 	}, 4000);
 	const handleErrorMessage = (e) => {
-		console.log(e.message);
 		errorMessageRef.current.innerText = e.message.includes("Email")
 			? "البريد الالكتروني غير صحيح"
 			: e.message.includes("Phone Number")
 			? "رقم الهاتف غير صحيح"
-			: e.message.includes("Wrong Key")
+			: e.message.includes("Wrong Key") || e.message.includes("Authenticate")
 			? "المفتاح غير صحيح"
 			: e.message;
 		setText.clear();
@@ -41,7 +40,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, editPerson, 
 					label="البريد الالكتروني"
 					value={email}
 					onChange={(e) => {
-						setCredentials({ ...credentials, email: e.target.value });
+						setCredentials({ ...credentials, email: e.target.value.trim() });
 					}}
 				/>
 				<CustomInput
@@ -59,7 +58,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, editPerson, 
 					label="المفتاح السري"
 					value={secretKey}
 					onChange={(e) => {
-						setCredentials({ ...credentials, secretKey: e.target.value });
+						setCredentials({ ...credentials, secretKey: e.target.value.trim() });
 					}}
 				/>
 				<p className="error-message red" ref={errorMessageRef}></p>
@@ -69,7 +68,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, editPerson, 
 	) : statusCode !== 200 ? (
 		<AddWindow
 			person={person}
-			theme="alt"
+			isFixed={false}
 			updatePerson={updatePerson}
 			editPerson={async () => {
 				try {

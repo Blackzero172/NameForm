@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ChildCard from "../ChildCard/ChildCard";
 import CustomButton from "../CustomButton/CustomButton.components";
 import CustomInput from "../CustomInput/CustomInput.components";
 import CustomRadio from "../CustomRadio/CustomRadio";
 import "./AddWindow.css";
 
-const AddWindow = ({ person, updatePerson, editPerson, closeWindow, theme, getData }) => {
+const AddWindow = ({ person, updatePerson, editPerson, closeWindow, isFixed, getData }) => {
 	const [stepCounter, setStep] = useState(0);
 	const { name, phoneNumber, email, children, spouse, gender, birthDate } = person;
 	const [isMarried, setMarried] = useState();
@@ -38,7 +39,11 @@ const AddWindow = ({ person, updatePerson, editPerson, closeWindow, theme, getDa
 		updatePerson({ ...person, children: childrenCopy });
 	};
 	return (
-		<form className={`add-window flex-both `} onSubmit={handleStepSubmit}>
+		<form
+			className={`add-window flex-both `}
+			onSubmit={handleStepSubmit}
+			style={isFixed ? { position: "relative" } : {}}
+		>
 			<div className="window flex-column">
 				<div className="cancel-btn flex-both" onClick={closeWindow}>
 					<i className="fas fa-times"></i>
