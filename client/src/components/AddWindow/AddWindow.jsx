@@ -42,7 +42,11 @@ const AddWindow = ({ person, updatePerson, editPerson, closeWindow, isFixed, get
 		<form
 			className={`add-window flex-both `}
 			onSubmit={handleStepSubmit}
-			style={isFixed ? { position: "relative", overflowY: "visible" } : {}}
+			style={
+				isFixed
+					? { position: "relative", overflowY: "visible", paddingBottom: "env(safe-area-inset-bottom)" }
+					: {}
+			}
 		>
 			<div className="window flex-column">
 				<div className="cancel-btn flex-both" onClick={closeWindow}>
