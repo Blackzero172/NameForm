@@ -68,7 +68,7 @@ const FormPage = ({ setCredentials, credentials, getPerson, person, editPerson, 
 	) : statusCode !== 200 ? (
 		<AddWindow
 			person={person}
-			isFixed={false}
+			isFixed={true}
 			updatePerson={updatePerson}
 			editPerson={async () => {
 				try {

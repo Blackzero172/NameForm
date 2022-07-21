@@ -1,6 +1,6 @@
 .add-window {
 	width: 100%;
-	height: 100vh;
+	min-height: 100vh;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -98,4 +98,13 @@
 }
 .add-window.alt .cancel-btn {
 	display: none;
+}
+.form-window {
+	position: relative;
+	margin-top: 3.5rem;
+	margin-bottom: calc(env(safe-area-inset-bottom) + 3.5rem);
+	overflow: visible;
+}
+.form-window .inputs-container {
+	overflow: visible;
 }

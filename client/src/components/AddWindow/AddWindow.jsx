@@ -39,15 +39,7 @@ const AddWindow = ({ person, updatePerson, editPerson, closeWindow, isFixed, get
 		updatePerson({ ...person, children: childrenCopy });
 	};
 	return (
-		<form
-			className={`add-window flex-both `}
-			onSubmit={handleStepSubmit}
-			style={
-				isFixed
-					? { position: "relative", overflowY: "visible", paddingBottom: "env(safe-area-inset-bottom)" }
-					: {}
-			}
-		>
+		<form className={`add-window flex-both ${isFixed ? "form-window" : ""} `} onSubmit={handleStepSubmit}>
 			<div className="window flex-column">
 				<div className="cancel-btn flex-both" onClick={closeWindow}>
 					<i className="fas fa-times"></i>

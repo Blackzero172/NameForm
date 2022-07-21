@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 const _ = require("lodash");
 const getPerson = async (req, res) => {
+	console.log(req.body);
 	try {
 		const { email, phoneNumber, id } = req.body;
 		let person;
