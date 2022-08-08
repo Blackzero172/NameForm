@@ -13,7 +13,7 @@
 }
 .add-window .window {
 	min-width: 60%;
-	min-height: 65vh;
+	max-height: 90vh;
 	background-color: var(--main-color);
 	color: white;
 	text-align: center;
@@ -104,6 +104,10 @@
 	margin-top: 3.5rem;
 	margin-bottom: calc(env(safe-area-inset-bottom) + 3.5rem);
 	overflow: visible;
+}
+.form-window .window {
+	min-height: 65vh;
+	max-height: unset;
 }
 .form-window .inputs-container {
 	overflow: visible;
