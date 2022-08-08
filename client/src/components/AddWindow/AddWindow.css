@@ -13,7 +13,7 @@
 }
 .add-window .window {
 	min-width: 60%;
-	max-height: 90vh;
+	max-height: 65vh;
 	background-color: var(--main-color);
 	color: white;
 	text-align: center;
