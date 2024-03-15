@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./CustomInput.styles.css";
 import moment from "moment";
 import { isMobilePhone, isEmail } from "validator";
@@ -92,11 +92,13 @@ const CustomInput = ({
 		if (stateSetValid) {
 			checkValid();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value]);
 	useEffect(() => {
 		if (stateSetValid) {
 			checkValid();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

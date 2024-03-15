@@ -9,6 +9,7 @@ const ChildCard = ({ child, onChange, index, stateSetValid }) => {
 	const { name, phoneNumber, birthDate, email, gender } = child;
 	useEffect(() => {
 		stateSetValid(inputValid.filter((input) => !input) < 1);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputValid]);
 	return (
 		<div className="child-card flex-both">

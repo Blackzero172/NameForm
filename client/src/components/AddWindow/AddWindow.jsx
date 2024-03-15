@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import ChildCard from "../ChildCard/ChildCard";
 import CustomButton from "../CustomButton/CustomButton.components";
 import CustomInput from "../CustomInput/CustomInput.components";
@@ -13,6 +12,7 @@ const AddWindow = ({ person, updatePerson, editPerson, closeWindow, isFixed, get
 	const [isMarried, setMarried] = useState();
 	useEffect(() => {
 		if (spouse.name) setMarried(true);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const [inputValid, setValid] = useState([true, true, true, true]);
 	const condition = 0 + Number(isMarried) + Number(children.length > 0);
