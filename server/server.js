@@ -6,7 +6,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const Router = require("./src/Router");
-const port = process.env.PORT || 5555;
+const port = process.env.PORT || 8080;
 const server = express();
 const corsOptions = {
 	origin: "http://localhost:3000",
